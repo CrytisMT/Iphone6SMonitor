@@ -1,5 +1,14 @@
 <html>
 <body>
 <h2>Hello World!</h2>
+
+<form id="addTaskForm" action="/addTask" method="post">
+    email<input id="email" name="email" type="text">
+    关键词<input id="keyword" name="keyword" type="text">
+    版本<select name="type">
+    <option value="cn">国行</option>
+    <option value="hk">港行</option></select>
+    <input type="submit">
+</form>
 </body>
 </html>
