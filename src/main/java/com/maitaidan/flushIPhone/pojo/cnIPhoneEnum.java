@@ -6,7 +6,7 @@ package com.maitaidan.flushIPhone.pojo;
 public enum cnIPhoneEnum {
 
 
-    Silver16("ML7D2CH/A", "IPhone6S-银色-16GB",Parameters.IPhone6SScreenSize,Parameters.SilverColor,Parameters.Capacity16),
+    Silver16("ML7D2CH/A", "IPhone6S-银色-16GB", Parameters.IPhone6SScreenSize, Parameters.SilverColor, Parameters.Capacity16),
     Silver64("ML7H2CH/A", "IPhone6S-银色-64GB", Parameters.IPhone6SScreenSize, Parameters.SilverColor, Parameters.Capacity64),
     Silver128("ML7H2CH/A", "IPhone6S-银色-128GB", Parameters.IPhone6SScreenSize, Parameters.SilverColor, Parameters.Capacity128),
     Silver16Plus("ML6C2CH/A", "IPhone6S Plus-银色-16GB", Parameters.IPhone6SPlusScreenSize, Parameters.SilverColor, Parameters.Capacity16),
@@ -38,7 +38,7 @@ public enum cnIPhoneEnum {
     private String capacity;
 
     cnIPhoneEnum(String partNumber, String name, String screenSize, String color, String capacity) {
-        this.partNumber=partNumber;
+        this.partNumber = partNumber;
         this.name = name;
         this.screenSize = screenSize;
         this.color = color;
@@ -59,6 +59,30 @@ public enum cnIPhoneEnum {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getScreenSize() {
+        return screenSize;
+    }
+
+    public void setScreenSize(String screenSize) {
+        this.screenSize = screenSize;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(String capacity) {
+        this.capacity = capacity;
     }
 
     public String getNameByPartName(String partNumber) {
