@@ -6,12 +6,12 @@ package com.maitaidan.flushIPhone.pojo;
 public enum hkIPhoneEnum {
 
 
-    Sliver16("ML7E2CH/A", "IPhone6S-银色-16GB"),
-    Sliver64("ML7E2CH/A", "IPhone6S-银色-64GB"),
-    Sliver128("ML7E2CH/A", "IPhone6S-银色-128GB"),
-    Sliver16Plus("ML7E2CH/A", "IPhone6S Plus-银色-16GB"),
-    Sliver64Plus("ML7E2CH/A", "IPhone6S Plus-银色-64GB"),
-    Sliver128Plus("ML7E2CH/A", "IPhone6S Plus-银色-128GB"),
+    Silver16("ML7E2CH/A", "IPhone6S-银色-16GB"),
+    Silver64("ML7E2CH/A", "IPhone6S-银色-64GB"),
+    Silver128("ML7E2CH/A", "IPhone6S-银色-128GB"),
+    Silver16Plus("ML7E2CH/A", "IPhone6S Plus-银色-16GB"),
+    Silver64Plus("ML7E2CH/A", "IPhone6S Plus-银色-64GB"),
+    Silver128Plus("ML7E2CH/A", "IPhone6S Plus-银色-128GB"),
     Gold16("ML7E2CH/A", "IPhone6S-土豪金-16GB"),
     Gold64("ML7E2CH/A", "IPhone6S-土豪金-64GB"),
     Gold128("ML7E2CH/A", "IPhone6S-土豪金-128GB"),
