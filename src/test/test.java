@@ -280,7 +280,6 @@ public class test {
         asJsonObject.remove("isToday");
         asJsonObject.remove("zh_CN");
         asJsonObject.remove("updated");
-        asJsonObject.get
         JsonArray asJsonArray = asJsonObject.getAsJsonArray();
     }
 }

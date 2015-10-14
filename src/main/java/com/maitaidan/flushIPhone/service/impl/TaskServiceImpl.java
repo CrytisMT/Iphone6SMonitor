@@ -16,7 +16,7 @@ import com.maitaidan.flushIPhone.service.TaskService;
 import com.maitaidan.flushIPhone.util.HttpRequestUtil;
 
 /**
- * Created by xinyu.jiang on 2015/10/9.
+ * Created by Crytis on 2015/10/9.
  */
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -55,5 +55,11 @@ public class TaskServiceImpl implements TaskService {
         }
 
         return null;
+    }
+
+
+    public void flushIPhoneOnlineStatus(){
+        //hk
+
     }
 }
