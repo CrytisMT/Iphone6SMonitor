@@ -17,5 +17,10 @@ public class Parameters {
     final public static String GrayColor = "space_gray";
     final public static String RoseGoldColor = "rosegld";
 
+    final public static String node = "home/shop_iphone/family/iphone6s";
+    final public static String step = "select";
+    final public static String carrierPolicyType = "UNLOCKED";
+    final public static String option_carrierModel = "UNLOCKED/WW";
+
 
 }

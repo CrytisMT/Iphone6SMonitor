@@ -6,4 +6,6 @@ package com.maitaidan.flushIPhone.service;
 public interface JSONService {
 
     public void parseStoreAvailableJson(String json);
+
+    public boolean isIPhoneOnlineAvailable(String json);
 }

@@ -1,5 +1,6 @@
 package com.maitaidan.flushIPhone.service;
 
+import com.maitaidan.flushIPhone.pojo.IPhoneEnum;
 import com.maitaidan.flushIPhone.pojo.IPhoneStatus;
 import com.maitaidan.flushIPhone.pojo.IPhoneTask;
 
@@ -16,4 +17,6 @@ public interface TaskService {
     public Map getIPhoneStatus();
 
     public Map<String,IPhoneStatus> getIPhoneAllStatus();
+
+    public boolean flushIPhoneOnlineStatus(String  partNumber);
 }
