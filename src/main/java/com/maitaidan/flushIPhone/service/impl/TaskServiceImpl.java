@@ -7,6 +7,7 @@ import com.maitaidan.flushIPhone.service.TaskService;
 import com.maitaidan.flushIPhone.util.HttpRequestUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -22,8 +23,8 @@ public class TaskServiceImpl implements TaskService {
     private final static String cnStoreOnlineUrl = "http://www.apple.com/cn/shop/updateSummary";
 
     //todo test用注解  不知道spring行不
-//    @Autowired
-    JSONService jsonService=new JSONServiceImpl();
+    @Autowired
+    JSONService jsonService;
 
     public void addTask(String email, IPhoneTask iPhoneTask) {
 
@@ -61,9 +62,12 @@ public class TaskServiceImpl implements TaskService {
 
     public boolean flushIPhoneOnlineStatus(String partNumber) {
         IPhoneEnum iphoneEnum = cnIPhoneEnum.Gold128.getEnumByPartName(partNumber) == null ? hkIPhoneEnum.Gold128.getEnumByPartName(partNumber):cnIPhoneEnum.Gold128.getEnumByPartName(partNumber);
-        HashMap<String, String> hkAvailableJSONParam = Maps.newHashMap();
-        setParam(iphoneEnum, hkAvailableJSONParam);
-        String jsonResult = HttpRequestUtil.doGet(hkStoreOnlineUrl, hkAvailableJSONParam, "UTF-8");
+        HashMap<String, String> availableJSONParam = Maps.newHashMap();
+        setParam(iphoneEnum, availableJSONParam);
+
+        String url;
+        if (iphoneEnum.)
+        String jsonResult = HttpRequestUtil.doGet(url, availableJSONParam, "UTF-8");
         logger.info("请求在线购买json结果:{}", jsonResult);
         try {
             Thread.sleep(1000);

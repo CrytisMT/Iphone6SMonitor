@@ -5,4 +5,5 @@ package com.maitaidan.flushIPhone.service;
  */
 public interface CacheService {
 
+    public boolean getTaskByEmail(String partNumber);
 }
