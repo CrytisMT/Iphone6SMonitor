@@ -42,7 +42,7 @@ public class CacheServiceImpl implements CacheService {
 //        IPhoneOnlineStatusCache.put(email, iPhoneTask);
 //    }
 
-    public boolean getTaskByEmail(String partNumber) {
+    public boolean isAvailableOnlineByPartNo(String partNumber) {
         try {
             return IPhoneOnlineStatusCache.get(partNumber);
         } catch (ExecutionException e) {

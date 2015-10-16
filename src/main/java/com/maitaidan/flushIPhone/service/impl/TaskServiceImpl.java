@@ -66,7 +66,12 @@ public class TaskServiceImpl implements TaskService {
         setParam(iphoneEnum, availableJSONParam);
 
         String url;
-        if (iphoneEnum.)
+        if (cnIPhoneEnum.Gold128.getEnumByPartName(partNumber) != null) {
+            url = cnStoreOnlineUrl;
+        } else {
+            url = hkStoreOnlineUrl;
+        }
+
         String jsonResult = HttpRequestUtil.doGet(url, availableJSONParam, "UTF-8");
         logger.info("请求在线购买json结果:{}", jsonResult);
         try {

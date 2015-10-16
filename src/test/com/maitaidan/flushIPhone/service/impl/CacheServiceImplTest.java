@@ -22,7 +22,9 @@ public class CacheServiceImplTest extends TestCase {
 
     @Test
     public void testGetTaskByEmail() throws Exception {
-        boolean available = cacheService.getTaskByEmail(hkIPhoneEnum.Gold128.getPartNumber());
+        boolean available = cacheService.isAvailableOnlineByPartNo(hkIPhoneEnum.Gold128.getPartNumber());
+        System.out.println(available);
+        available = cacheService.isAvailableOnlineByPartNo(hkIPhoneEnum.Gold128.getPartNumber());
         System.out.println(available);
     }
 }
