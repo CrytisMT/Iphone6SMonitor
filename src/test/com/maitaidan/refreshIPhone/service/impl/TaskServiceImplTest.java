@@ -1,6 +1,6 @@
-package com.maitaidan.flushIPhone.service.impl;
+package com.maitaidan.refreshIPhone.service.impl;
 
-import com.maitaidan.flushIPhone.pojo.hkIPhoneEnum;
+import com.maitaidan.refreshIPhone.pojo.hkIPhoneEnum;
 import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;

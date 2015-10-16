@@ -1,4 +1,4 @@
-package com.maitaidan.flushIPhone.service.impl;
+package com.maitaidan.refreshIPhone.service.impl;
 
 import junit.framework.TestCase;
 

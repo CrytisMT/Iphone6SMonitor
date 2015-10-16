@@ -1,4 +1,4 @@
-package com.maitaidan.flushIPhone.pojo;
+package com.maitaidan.refreshIPhone.pojo;
 
 /**
  * Created by Crytis on 2015/10/15.

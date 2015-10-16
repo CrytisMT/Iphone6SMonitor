@@ -1,4 +1,4 @@
-package com.maitaidan.flushIPhone.pojo;
+package com.maitaidan.refreshIPhone.pojo;
 
 import java.util.HashSet;
 
@@ -8,23 +8,38 @@ import java.util.HashSet;
  */
 public class IPhoneStatus {
     private String partNumer;
+    private String iphoneName;
     private boolean isOnline;
     private boolean isInStore;
     private String buyingUrl;
     private HashSet<String> availableStore;
 
-    public IPhoneStatus(String partNumer, boolean isOnline, boolean isInStore) {
-        this.partNumer = partNumer;
-        this.isOnline = isOnline;
-        this.isInStore = isInStore;
+    public IPhoneStatus() {
+        super();
     }
 
-    public IPhoneStatus(String partNumer, boolean isOnline, boolean isInStore, String buyingUrl, HashSet<String> availableStore) {
+    public IPhoneStatus(String partNumer, String iphoneName, boolean isOnline, boolean isInStore, String buyingUrl, HashSet<String> availableStore) {
         this.partNumer = partNumer;
+        this.iphoneName = iphoneName;
         this.isOnline = isOnline;
         this.isInStore = isInStore;
         this.buyingUrl = buyingUrl;
         this.availableStore = availableStore;
+    }
+
+    public IPhoneStatus(String partNumer, String iphoneName, boolean isOnline, String buyingUrl) {
+        this.partNumer = partNumer;
+        this.iphoneName = iphoneName;
+        this.isOnline = isOnline;
+        this.buyingUrl = buyingUrl;
+    }
+
+    public String getIphoneName() {
+        return iphoneName;
+    }
+
+    public void setIphoneName(String iphoneName) {
+        this.iphoneName = iphoneName;
     }
 
     public String getPartNumer() {

@@ -1,4 +1,4 @@
-package com.maitaidan.flushIPhone.pojo;
+package com.maitaidan.refreshIPhone.pojo;
 
 /**
  * Created by xinyu.jiang on 2015/10/11.
@@ -8,7 +8,7 @@ public enum cnIPhoneEnum implements IPhoneEnum{
 
     Silver16("ML7D2CH/A", "IPhone6S-银色-16GB", Parameters.IPhone6SScreenSize, Parameters.SilverColor, Parameters.Capacity16),
     Silver64("ML7H2CH/A", "IPhone6S-银色-64GB", Parameters.IPhone6SScreenSize, Parameters.SilverColor, Parameters.Capacity64),
-    Silver128("ML7H2CH/A", "IPhone6S-银色-128GB", Parameters.IPhone6SScreenSize, Parameters.SilverColor, Parameters.Capacity128),
+    Silver128("ML7M2CH/A", "IPhone6S-银色-128GB", Parameters.IPhone6SScreenSize, Parameters.SilverColor, Parameters.Capacity128),
     Silver16Plus("ML6C2CH/A", "IPhone6S Plus-银色-16GB", Parameters.IPhone6SPlusScreenSize, Parameters.SilverColor, Parameters.Capacity16),
     Silver64Plus("ML6G2CH/A", "IPhone6S Plus-银色-64GB", Parameters.IPhone6SPlusScreenSize, Parameters.SilverColor, Parameters.Capacity64),
     Silver128Plus("ML6L2CH/A", "IPhone6S Plus-银色-128GB", Parameters.IPhone6SPlusScreenSize, Parameters.SilverColor, Parameters.Capacity128),

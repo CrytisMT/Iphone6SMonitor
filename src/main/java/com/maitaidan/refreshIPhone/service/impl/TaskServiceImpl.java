@@ -1,17 +1,18 @@
-package com.maitaidan.flushIPhone.service.impl;
+package com.maitaidan.refreshIPhone.service.impl;
 
-import com.google.common.collect.Maps;
-import com.maitaidan.flushIPhone.pojo.*;
-import com.maitaidan.flushIPhone.service.JSONService;
-import com.maitaidan.flushIPhone.service.TaskService;
-import com.maitaidan.flushIPhone.util.HttpRequestUtil;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
+import com.google.common.collect.Maps;
+import com.maitaidan.refreshIPhone.pojo.*;
+import com.maitaidan.refreshIPhone.service.JSONService;
+import com.maitaidan.refreshIPhone.service.TaskService;
+import com.maitaidan.refreshIPhone.util.HttpRequestUtil;
 
 /**
  * Created by Crytis on 2015/10/9.
@@ -74,8 +75,9 @@ public class TaskServiceImpl implements TaskService {
 
         String jsonResult = HttpRequestUtil.doGet(url, availableJSONParam, "UTF-8");
         logger.info("请求在线购买json结果:{}", jsonResult);
+        System.out.println(jsonResult);
         try {
-            Thread.sleep(1000);
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             logger.error(e.getMessage(), e);
         }

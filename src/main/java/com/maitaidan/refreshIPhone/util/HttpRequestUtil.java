@@ -1,4 +1,4 @@
-package com.maitaidan.flushIPhone.util;
+package com.maitaidan.refreshIPhone.util;
 
 import com.google.common.io.CharStreams;
 import org.apache.http.HttpResponse;
