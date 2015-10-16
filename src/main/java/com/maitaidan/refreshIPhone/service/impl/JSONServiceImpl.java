@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.maitaidan.refreshIPhone.service.JSONService;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,9 @@ public class JSONServiceImpl implements JSONService {
      * @return
      */
     public boolean isIPhoneOnlineAvailable(String json) {
+        if (StringUtils.isBlank(json)) {
+            return false;
+        }
         boolean isAvailable;
         JsonParser jsonParser = new JsonParser();
         JsonElement jsonElement = jsonParser.parse(json);

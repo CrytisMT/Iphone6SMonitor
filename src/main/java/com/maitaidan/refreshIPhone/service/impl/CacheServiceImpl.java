@@ -16,6 +16,7 @@ import com.google.common.cache.LoadingCache;
 import com.maitaidan.refreshIPhone.pojo.cnIPhoneEnum;
 import com.maitaidan.refreshIPhone.service.CacheService;
 import com.maitaidan.refreshIPhone.service.TaskService;
+import com.maitaidan.refreshIPhone.util.HTTPThread;
 
 /**
  * Created by xinyu.jiang on 2015/10/9.
@@ -54,14 +55,20 @@ public class CacheServiceImpl implements CacheService {
 
     @Scheduled(fixedDelay = 300000)
     public void refreshCache() {
-        logger.info("定时任务刷新缓存");
+        long time = System.currentTimeMillis();
+        logger.info("定时任务刷新缓存，当前时间{}", time);
         IPhoneOnlineStatusCache.invalidateAll();
         cnIPhoneEnum[] cnIPhoneEnums = cnIPhoneEnum.values();
 
         for (cnIPhoneEnum cnIPhoneEnum : cnIPhoneEnums) {
             String partName = cnIPhoneEnum.getPartNumber();
-            isAvailableOnlineByPartNo(partName);
+            // isAvailableOnlineByPartNo(partName);
+            HTTPThread httpThread = new HTTPThread(partName,IPhoneOnlineStatusCache);
+            Thread thread = new Thread(httpThread);
+            thread.start();
         }
+
+        logger.info("刷新缓存完毕,耗时：{}", System.currentTimeMillis() - time);
     }
 
 }
