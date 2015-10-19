@@ -1,8 +1,10 @@
 package com.maitaidan.refreshIPhone.controller;
 
 import com.google.common.collect.Maps;
+import com.maitaidan.refreshIPhone.pojo.IPhoneEnum;
 import com.maitaidan.refreshIPhone.pojo.IPhoneStatus;
 import com.maitaidan.refreshIPhone.pojo.cnIPhoneEnum;
+import com.maitaidan.refreshIPhone.pojo.hkIPhoneEnum;
 import com.maitaidan.refreshIPhone.service.CacheService;
 import com.maitaidan.refreshIPhone.service.TaskService;
 import org.slf4j.Logger;
@@ -25,11 +27,22 @@ public class IPhoneController {
     @Resource
     CacheService cacheService;
 
-    @RequestMapping(value = "addTask")
+    @RequestMapping(value = "addOnlineTask")
     @ResponseBody
-    public String addTask(String email, String keyword, String type) {
-        logger.info("参数:{}{}{}", email, keyword, type);
-//        taskService.addTask(email,new IPhoneTask());
+    public String addOnlineTask(String email, String keyword, String region,String IPhoneColor,String IPhoneScreenSize,String IPhoneCapacity) {
+        logger.info("参数:{},{},{}", email, keyword, region);
+        IPhoneEnum iPhone=null;
+        if ("hk".equalsIgnoreCase(region)) {
+            iPhone = hkIPhoneEnum.Gold128.getEnumByParam(IPhoneColor, IPhoneCapacity, IPhoneScreenSize);
+        }else if ("cn".equalsIgnoreCase(region)) {
+            iPhone = cnIPhoneEnum.Gold128.getEnumByParam(IPhoneColor, IPhoneCapacity, IPhoneScreenSize);
+        }
+        if (iPhone == null) {
+            logger.error("获取不到iPhone型号！");
+            return "获取不到iPhone型号！";
+        }
+
+        taskService.addOnlineTask(iPhone.getPartNumber(),region,email);
         return null;
     }
 
@@ -39,15 +52,21 @@ public class IPhoneController {
     public Map<String, IPhoneStatus> getonlineStatus() {
         HashMap<String, IPhoneStatus> statusResult = Maps.newHashMap();
         cnIPhoneEnum[] cnIPhoneEnums = cnIPhoneEnum.values();
-        for (cnIPhoneEnum cnIPhoneEnum : cnIPhoneEnums) {
-            String partName = cnIPhoneEnum.getPartNumber();
+        hkIPhoneEnum[] hkIPhoneEnums = hkIPhoneEnum.values();
+//        generateJSON(statusResult, cnIPhoneEnums);
+        generateJSON(statusResult, hkIPhoneEnums);
+        return statusResult;
+    }
+
+    private void generateJSON(HashMap<String, IPhoneStatus> statusResult, IPhoneEnum[] iPhoneEnums) {
+        for (IPhoneEnum iPhoneEnum : iPhoneEnums) {
+            String partName = iPhoneEnum.getPartNumber();
             IPhoneStatus iPhoneStatus = new IPhoneStatus();
-            iPhoneStatus.setIphoneName(cnIPhoneEnum.getName());
+            iPhoneStatus.setIphoneName(iPhoneEnum.getName());
             iPhoneStatus.setPartNumer(partName);
             iPhoneStatus.setIsOnline(cacheService.isAvailableOnlineByPartNo(partName));
             statusResult.put(partName, iPhoneStatus);
         }
-        return statusResult;
     }
 
 }

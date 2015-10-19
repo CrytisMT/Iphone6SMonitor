@@ -10,6 +10,7 @@ import com.maitaidan.refreshIPhone.pojo.IPhoneTask;
  */
 public interface TaskService {
     void addTask(String email, IPhoneTask iPhoneTask);
+    void addOnlineTask(String partNumber,String region,String email);
 
     IPhoneTask getTask(String email);
 

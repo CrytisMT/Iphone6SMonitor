@@ -13,4 +13,8 @@ public interface IPhoneEnum {
     String getPartNumber();
 
     public IPhoneEnum getEnumByPartName(String partNumber);
+
+    String getName();
+
+    IPhoneEnum getEnumByParam(String IPhoneColor, String IPhoneCapacity, String IPhoneScreenSize);
 }

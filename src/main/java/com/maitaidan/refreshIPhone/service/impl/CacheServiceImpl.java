@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 
+import com.maitaidan.refreshIPhone.pojo.hkIPhoneEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -59,11 +60,19 @@ public class CacheServiceImpl implements CacheService {
         logger.info("定时任务刷新缓存，当前时间{}", time);
         IPhoneOnlineStatusCache.invalidateAll();
         cnIPhoneEnum[] cnIPhoneEnums = cnIPhoneEnum.values();
+        hkIPhoneEnum[] hkIPhoneEnums = hkIPhoneEnum.values();
 
         for (cnIPhoneEnum cnIPhoneEnum : cnIPhoneEnums) {
             String partName = cnIPhoneEnum.getPartNumber();
             // isAvailableOnlineByPartNo(partName);
             HTTPThread httpThread = new HTTPThread(partName,IPhoneOnlineStatusCache);
+            Thread thread = new Thread(httpThread);
+            thread.start();
+        }
+        for (hkIPhoneEnum hkIPhoneEnum : hkIPhoneEnums) {
+            String partName = hkIPhoneEnum.getPartNumber();
+            // isAvailableOnlineByPartNo(partName);
+            HTTPThread httpThread = new HTTPThread(partName, IPhoneOnlineStatusCache);
             Thread thread = new Thread(httpThread);
             thread.start();
         }

@@ -3,7 +3,7 @@ package com.maitaidan.refreshIPhone.pojo;
 /**
  * Created by xinyu.jiang on 2015/10/11.
  */
-public enum cnIPhoneEnum implements IPhoneEnum{
+public enum cnIPhoneEnum implements IPhoneEnum {
 
 
     Silver16("ML7D2CH/A", "IPhone6S-银色-16GB", Parameters.IPhone6SScreenSize, Parameters.SilverColor, Parameters.Capacity16),
@@ -100,6 +100,16 @@ public enum cnIPhoneEnum implements IPhoneEnum{
         cnIPhoneEnum[] values = cnIPhoneEnum.values();
         for (cnIPhoneEnum value : values) {
             if (value.partNumber.equals(partNumber)) {
+                return value;
+            }
+        }
+        return null;
+    }
+
+    public IPhoneEnum getEnumByParam(String IPhoneColor, String IPhoneCapacity, String IPhoneScreenSize) {
+        cnIPhoneEnum[] values = cnIPhoneEnum.values();
+        for (cnIPhoneEnum value : values) {
+            if (value.capacity.equalsIgnoreCase(IPhoneCapacity) && value.color.equalsIgnoreCase(IPhoneColor) && value.screenSize.equalsIgnoreCase(IPhoneScreenSize)) {
                 return value;
             }
         }

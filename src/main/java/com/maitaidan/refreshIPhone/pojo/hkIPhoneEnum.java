@@ -105,4 +105,14 @@ public enum hkIPhoneEnum implements IPhoneEnum {
         }
         return null;
     }
+
+    public IPhoneEnum getEnumByParam(String IPhoneColor, String IPhoneCapacity, String IPhoneScreenSize) {
+        hkIPhoneEnum[] values = hkIPhoneEnum.values();
+        for (hkIPhoneEnum value : values) {
+            if (value.capacity.equalsIgnoreCase(IPhoneCapacity) && value.color.equalsIgnoreCase(IPhoneColor) && value.screenSize.equalsIgnoreCase(IPhoneScreenSize)) {
+                return value;
+            }
+        }
+        return null;
+    }
 }

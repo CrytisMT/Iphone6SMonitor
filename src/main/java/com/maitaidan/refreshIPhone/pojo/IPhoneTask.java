@@ -4,35 +4,17 @@ package com.maitaidan.refreshIPhone.pojo;
  * Created by xinyu.jiang on 2015/10/9.
  */
 public class IPhoneTask {
-    private String color;
-    private Integer size;
-    private String type;
     // 想去哪个店的关键词
     private String keyword;
     private String email;
+    private IPhoneEnum iPhone;
+    private String buyingUrl;
 
-    public IPhoneTask(String color, Integer size, String type, String keyword, String email) {
-        this.color = color;
-        this.size = size;
-        this.type = type;
+
+    public IPhoneTask(String keyword, String email, IPhoneEnum iPhone) {
         this.keyword = keyword;
         this.email = email;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public Integer getSize() {
-        return size;
-    }
-
-    public void setSize(Integer size) {
-        this.size = size;
+        this.iPhone = iPhone;
     }
 
     public String getKeyword() {
@@ -43,19 +25,27 @@ public class IPhoneTask {
         this.keyword = keyword;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public IPhoneEnum getiPhone() {
+        return iPhone;
+    }
+
+    public void setiPhone(IPhoneEnum iPhone) {
+        this.iPhone = iPhone;
+    }
+
+    public String getBuyingUrl() {
+        return buyingUrl;
+    }
+
+    public void setBuyingUrl(String buyingUrl) {
+        this.buyingUrl = buyingUrl;
     }
 }

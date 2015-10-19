@@ -3,8 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>在线购买状态</title>
-</head>
-<body>
+    <script type="application/javascript" src="js/jquery-1.11.3.min.js"></script>
 
+</head>
+<body onload="getOnlineStatus()">
+
+<div class="cn_online_status"></div>
+
+<script type="application/javascript">
+    function getOnlineStatus() {
+        $.getJSON("onlineStatus", function showStatus(data) {
+            for (var key in data) {
+                $(".cn_online_status").append(data[key].iphoneName).append("是否可以购买：").append(data[key].online).append("购买链接:"+data[key].buyingUrl).append("<br/>");
+            }
+        })
+    }
+
+</script>
 </body>
 </html>
