@@ -1,21 +1,5 @@
 package com.maitaidan.refreshIPhone.service.impl;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import org.apache.commons.lang.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
-
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.maitaidan.refreshIPhone.pojo.*;
@@ -23,10 +7,25 @@ import com.maitaidan.refreshIPhone.service.CacheService;
 import com.maitaidan.refreshIPhone.service.JSONService;
 import com.maitaidan.refreshIPhone.service.TaskService;
 import com.maitaidan.refreshIPhone.util.HttpRequestUtil;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * Created by Crytis on 2015/10/9.
- *
  */
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -112,15 +111,23 @@ public class TaskServiceImpl implements TaskService {
             String partNumber = iPhoneTask.getiPhone().getPartNumber();
             boolean isOK = cacheService.isAvailableOnlineByPartNo(partNumber);
             if (isOK) {
-                // 如果可以买了，发邮件，清除任务
-                it.remove();
+
                 logger.info("{}可以买了", partNumber);
-                SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-                simpleMailMessage.setTo("38006766@qq.com");
-                simpleMailMessage.setSubject("test");
-                simpleMailMessage.setFrom(javaMailSender.getUsername());
-                simpleMailMessage.setText("haha");
-                javaMailSender.send(simpleMailMessage);
+                MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+                MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
+                try {
+                    helper.setTo(iPhoneTask.getEmail());
+                    helper.setSubject("你好！你关注的iPhone有货了！");
+                    helper.setFrom(javaMailSender.getUsername());
+                    String content = "Hi!<br/>你所关注的" + iPhoneTask.getiPhone().getName() + "已经有货可以在线购买了！购买链接：<a href=\"" + iPhoneTask.getBuyingUrl() + "\">购买传送门！</a>" + "<br/>Powered By www.maitaidan.com";
+                    helper.setText(content,true);
+
+                    // 如果可以买了，发邮件，清除任务
+                    it.remove();
+                } catch (MessagingException e) {
+                    logger.error("发送邮件失败！{},{}", iPhoneTask, e);
+                }
+                javaMailSender.send(mimeMessage);
             } else {
                 logger.info("{}不可购买", partNumber);
             }
