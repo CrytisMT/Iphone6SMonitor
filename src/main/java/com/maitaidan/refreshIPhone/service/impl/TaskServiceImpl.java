@@ -26,6 +26,7 @@ import java.util.Map;
 
 /**
  * Created by Crytis on 2015/10/9.
+ *
  */
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -105,6 +106,8 @@ public class TaskServiceImpl implements TaskService {
      */
     @Scheduled(fixedDelay = 3000)
     public void isNeedIPhoneOnlineAvailable() {
+        logger.info("当前任务数量:{}", tasks.size());
+        logger.info("当前任务：{}",tasks.toString());
         Iterator<IPhoneTask> it = tasks.iterator();
         while (it.hasNext()) {
             IPhoneTask iPhoneTask = it.next();
@@ -118,15 +121,16 @@ public class TaskServiceImpl implements TaskService {
                 try {
                     helper.setTo(iPhoneTask.getEmail());
                     helper.setSubject("你好！你关注的iPhone有货了！");
-                    helper.setFrom(javaMailSender.getUsername());
+                    helper.setFrom("麦钛蛋IPhone6S监控");
                     String content = "Hi!<br/>你所关注的" + iPhoneTask.getiPhone().getName() + "已经有货可以在线购买了！购买链接：<a href=\"" + iPhoneTask.getBuyingUrl() + "\">购买传送门！</a>" + "<br/>Powered By www.maitaidan.com";
-                    helper.setText(content,true);
+                    helper.setText(content, true);
 
                     // 如果可以买了，发邮件，清除任务
                     it.remove();
                 } catch (MessagingException e) {
                     logger.error("发送邮件失败！{},{}", iPhoneTask, e);
                 }
+                logger.info("发送邮件！{}",iPhoneTask.getEmail());
                 javaMailSender.send(mimeMessage);
             } else {
                 logger.info("{}不可购买", partNumber);

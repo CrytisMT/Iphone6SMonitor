@@ -5,16 +5,15 @@
     <script type="application/javascript" src="js/jquery-1.11.3.min.js"></script>
 </head>
 <body>
-<h2>Hello World!</h2>
+<h2>添加在线购买监控</h2>
 
 <form id="addTaskForm" action="/addOnlineTask" method="post">
-    email<input id="email" name="email" type="text">
+    email(*)<input id="email" name="email" type="text">
     关键词<input id="keyword" name="keyword" type="text">
     版本<select name="region">
     <option value="cn">国行</option>
     <option value="hk">港行</option>
 </select>
-    <input type="submit">
     手机型号<select name="IPhoneScreenSize">
     <option value="4_7inch">6s</option>
     <option value="5_5inch">6s Plus</option>
@@ -31,7 +30,22 @@
     <option value="128gb">128GB</option>
 
 </select>
-    <input type="submit">
+    <input type="button" onclick="doSubmit()" value="提交">
 </form>
+<script type="application/javascript">function doSubmit() {
+    $.ajax({
+        cache: false,
+        type: "POST",
+        url: "/addOnlineTask", //把表单数据发送到ajax.jsp
+        data: $('#addTaskForm').serialize(), //要发送的是ajaxFrm表单中的数据
+        async: false,
+        error: function (request) {
+            alert("添加任务失败！");
+        },
+        success: function (data) {
+            alert(data);
+        }
+    });
+}</script>
 </body>
 </html>

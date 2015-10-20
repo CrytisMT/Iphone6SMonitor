@@ -75,6 +75,13 @@ public class IPhoneTask {
         return result;
     }
 
+    @Override
+    public String toString() {
+        return "IPhoneTask{" +
+                "email='" + email + '\'' +
+                ", iPhone=" + iPhone +
+                '}';
+    }
 
     /**
      * 生成购买链接

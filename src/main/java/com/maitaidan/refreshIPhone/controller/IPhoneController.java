@@ -7,6 +7,7 @@ import com.maitaidan.refreshIPhone.pojo.cnIPhoneEnum;
 import com.maitaidan.refreshIPhone.pojo.hkIPhoneEnum;
 import com.maitaidan.refreshIPhone.service.CacheService;
 import com.maitaidan.refreshIPhone.service.TaskService;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -27,14 +28,17 @@ public class IPhoneController {
     @Resource
     CacheService cacheService;
 
-    @RequestMapping(value = "addOnlineTask")
+    @RequestMapping(value = "addOnlineTask", produces = "application/x-www-form-urlencoded; charset=UTF-8")
     @ResponseBody
-    public String addOnlineTask(String email, String keyword, String region,String IPhoneColor,String IPhoneScreenSize,String IPhoneCapacity) {
+    public String addOnlineTask(String email, String keyword, String region, String IPhoneColor, String IPhoneScreenSize, String IPhoneCapacity) {
+        if (StringUtils.isBlank(email)) {
+            return "email是必填项";
+        }
         logger.info("参数:{},{},{}", email, keyword, region);
-        IPhoneEnum iPhone=null;
+        IPhoneEnum iPhone = null;
         if ("hk".equalsIgnoreCase(region)) {
             iPhone = hkIPhoneEnum.Gold128.getEnumByParam(IPhoneColor, IPhoneCapacity, IPhoneScreenSize);
-        }else if ("cn".equalsIgnoreCase(region)) {
+        } else if ("cn".equalsIgnoreCase(region)) {
             iPhone = cnIPhoneEnum.Gold128.getEnumByParam(IPhoneColor, IPhoneCapacity, IPhoneScreenSize);
         }
         if (iPhone == null) {
@@ -42,8 +46,8 @@ public class IPhoneController {
             return "获取不到iPhone型号！";
         }
 
-        taskService.addOnlineTask(iPhone.getPartNumber(),region,email);
-        return null;
+        taskService.addOnlineTask(iPhone.getPartNumber(), region, email);
+        return "添加在线购买监控任务成功！";
     }
 
 
