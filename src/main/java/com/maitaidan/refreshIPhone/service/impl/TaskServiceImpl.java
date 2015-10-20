@@ -107,7 +107,10 @@ public class TaskServiceImpl implements TaskService {
                 //如果可以买了，发邮件，清除任务
                 it.remove();
                 logger.info("{}可以买了", partNumber);
+            } else {
+                logger.info("{}不可购买");
             }
+
         }
     }
 
