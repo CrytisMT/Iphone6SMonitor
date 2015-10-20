@@ -11,6 +11,8 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,7 @@ import com.maitaidan.refreshIPhone.util.HttpRequestUtil;
 
 /**
  * Created by Crytis on 2015/10/9.
+ *
  */
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -34,6 +37,9 @@ public class TaskServiceImpl implements TaskService {
     JSONService jsonService;
     @Resource
     CacheService cacheService;
+    @Resource
+    JavaMailSenderImpl javaMailSender;
+
     private Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
     private HashSet<IPhoneTask> tasks = Sets.newHashSet();
 
@@ -85,16 +91,14 @@ public class TaskServiceImpl implements TaskService {
         }
 
         String jsonResult = HttpRequestUtil.doGet(url, availableJSONParam, "UTF-8");
-        logger.info("请求在线购买json结果:{}", jsonResult);
-        System.out.println(jsonResult);
+        // logger.info("请求在线购买json结果:{}", jsonResult);
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
             logger.error(e.getMessage(), e);
         }
-        boolean iPhoneOnlineAvailable = jsonService.isIPhoneOnlineAvailable(jsonResult);
 
-        return iPhoneOnlineAvailable;
+        return jsonService.isIPhoneOnlineAvailable(jsonResult);
     }
 
     /**
@@ -111,8 +115,14 @@ public class TaskServiceImpl implements TaskService {
                 // 如果可以买了，发邮件，清除任务
                 it.remove();
                 logger.info("{}可以买了", partNumber);
+                SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+                simpleMailMessage.setTo("38006766@qq.com");
+                simpleMailMessage.setSubject("test");
+                simpleMailMessage.setFrom(javaMailSender.getUsername());
+                simpleMailMessage.setText("haha");
+                javaMailSender.send(simpleMailMessage);
             } else {
-                logger.info("{}不可购买");
+                logger.info("{}不可购买", partNumber);
             }
 
         }

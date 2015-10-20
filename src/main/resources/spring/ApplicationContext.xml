@@ -4,30 +4,37 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:task="http://www.springframework.org/schema/task"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
-       <!-- 自动搜索@Controller标注的类 -->
-       <context:component-scan base-package="com.maitaidan.refreshIPhone">
-       </context:component-scan>
+    <!-- 自动搜索@Controller标注的类 -->
+    <context:component-scan base-package="com.maitaidan.refreshIPhone">
+    </context:component-scan>
 
-       <context:component-scan base-package="com.maitaidan.refreshIPhone">
-       </context:component-scan>
+    <context:component-scan base-package="com.maitaidan.refreshIPhone">
+    </context:component-scan>
 
-       <!--<!—开启这个配置，spring才能识别@Scheduled注解   &ndash;&gt;-->
-       <task:annotation-driven executor="executor" scheduler="qbScheduler" mode="proxy"/>
-       <task:executor id="executor" pool-size="5"/>
-       <task:scheduler id="qbScheduler" pool-size="10"/>
+    <!--<!—开启这个配置，spring才能识别@Scheduled注解   &ndash;&gt;-->
+    <task:annotation-driven executor="executor" scheduler="qbScheduler" mode="proxy"/>
+    <task:executor id="executor" pool-size="5"/>
+    <task:scheduler id="qbScheduler" pool-size="10"/>
 
-       <!-- 默认的注解映射的支持 -->
-       <mvc:annotation-driven/>
+    <!-- 默认的注解映射的支持 -->
+    <mvc:annotation-driven/>
 
-       <mvc:resources location="/" mapping="/**"/>
+    <mvc:resources location="/" mapping="/**"/>
 
-       <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
-       <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
-              <property name="messageConverters">
-                     <list>
-                            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
-                     </list>
-              </property>
-       </bean>
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+            </list>
+        </property>
+    </bean>
 
+    <!--发送邮件-->
+    <bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+                <!--都是新注册瞎写的-->
+                <property name="host" value="smtp.163.com"/>
+                <property name="username" value="maitaidan"/>
+                <property name="password" value="ghhfcgqlqjxohagw"/>
+    </bean>
 </beans>
