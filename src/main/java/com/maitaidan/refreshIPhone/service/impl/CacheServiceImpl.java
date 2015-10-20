@@ -54,7 +54,7 @@ public class CacheServiceImpl implements CacheService {
         return false;
     }
 
-    @Scheduled(fixedDelay = 300000)
+    @Scheduled(fixedDelay = 60000)
     public void refreshCache() {
         long time = System.currentTimeMillis();
         logger.info("定时任务刷新缓存，当前时间{}", time);

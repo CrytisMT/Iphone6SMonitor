@@ -1,12 +1,12 @@
 package com.maitaidan.refreshIPhone.service.impl;
 
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.maitaidan.refreshIPhone.pojo.*;
-import com.maitaidan.refreshIPhone.service.CacheService;
-import com.maitaidan.refreshIPhone.service.JSONService;
-import com.maitaidan.refreshIPhone.service.TaskService;
-import com.maitaidan.refreshIPhone.util.HttpRequestUtil;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,24 +14,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import java.util.*;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.maitaidan.refreshIPhone.pojo.*;
+import com.maitaidan.refreshIPhone.service.CacheService;
+import com.maitaidan.refreshIPhone.service.JSONService;
+import com.maitaidan.refreshIPhone.service.TaskService;
+import com.maitaidan.refreshIPhone.util.HttpRequestUtil;
 
 /**
  * Created by Crytis on 2015/10/9.
  */
 @Service
 public class TaskServiceImpl implements TaskService {
-    private Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
     private final static String hkStoreOnlineUrl = "http://www.apple.com/hk-zh/shop/updateSummary";
     private final static String cnStoreOnlineUrl = "http://www.apple.com/cn/shop/updateSummary";
-    private ArrayList<IPhoneTask> tasks = Lists.newArrayList();
-
-    //todo test用注解  不知道spring行不
+    // todo test用注解 不知道spring行不
     @Autowired
     JSONService jsonService;
     @Resource
     CacheService cacheService;
+    private Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
+    private HashSet<IPhoneTask> tasks = Sets.newHashSet();
 
     public void addTask(String email, IPhoneTask iPhoneTask) {
 
@@ -66,9 +70,10 @@ public class TaskServiceImpl implements TaskService {
         return null;
     }
 
-
     public boolean flushIPhoneOnlineStatus(String partNumber) {
-        IPhoneEnum iphoneEnum = cnIPhoneEnum.Gold128.getEnumByPartName(partNumber) == null ? hkIPhoneEnum.Gold128.getEnumByPartName(partNumber) : cnIPhoneEnum.Gold128.getEnumByPartName(partNumber);
+        IPhoneEnum iphoneEnum = cnIPhoneEnum.Gold128.getEnumByPartName(partNumber) == null
+                ? hkIPhoneEnum.Gold128.getEnumByPartName(partNumber)
+                : cnIPhoneEnum.Gold128.getEnumByPartName(partNumber);
         HashMap<String, String> availableJSONParam = Maps.newHashMap();
         setParam(iphoneEnum, availableJSONParam);
 
@@ -92,19 +97,18 @@ public class TaskServiceImpl implements TaskService {
         return iPhoneOnlineAvailable;
     }
 
-
     /**
      * 定时检测在线购买是否可以
      */
     @Scheduled(fixedDelay = 3000)
     public void isNeedIPhoneOnlineAvailable() {
-        Iterator<IPhoneTask> it = tasks.listIterator();
+        Iterator<IPhoneTask> it = tasks.iterator();
         while (it.hasNext()) {
             IPhoneTask iPhoneTask = it.next();
             String partNumber = iPhoneTask.getiPhone().getPartNumber();
             boolean isOK = cacheService.isAvailableOnlineByPartNo(partNumber);
             if (isOK) {
-                //如果可以买了，发邮件，清除任务
+                // 如果可以买了，发邮件，清除任务
                 it.remove();
                 logger.info("{}可以买了", partNumber);
             } else {
@@ -113,7 +117,6 @@ public class TaskServiceImpl implements TaskService {
 
         }
     }
-
 
     public void addOnlineTask(String partNumber, String region, String email) {
         if (StringUtils.isBlank(region)) {
@@ -128,19 +131,17 @@ public class TaskServiceImpl implements TaskService {
         }
     }
 
-
     private void setParam(IPhoneEnum IPhoneType, HashMap<String, String> Param) {
         Param.put("node", Parameters.node);
         Param.put("setp", Parameters.step);
         Param.put("option.carrierModel", Parameters.option_carrierModel);
         Param.put("carrierPolicyType", Parameters.carrierPolicyType);
-        //其它变化参数
+        // 其它变化参数
         Param.put("option.dimensionScreensize", IPhoneType.getScreenSize());
         Param.put("option.dimensionColor", IPhoneType.getColor());
         Param.put("option.dimensionCapacity", IPhoneType.getCapacity());
         Param.put("product", IPhoneType.getPartNumber());
         logger.info("请求在线购买json参数:{}", Param);
     }
-
 
 }
