@@ -12,7 +12,7 @@ public interface IPhoneEnum {
 
     String getPartNumber();
 
-    public IPhoneEnum getEnumByPartName(String partNumber);
+    IPhoneEnum getEnumByPartName(String partNumber);
 
     String getName();
 
