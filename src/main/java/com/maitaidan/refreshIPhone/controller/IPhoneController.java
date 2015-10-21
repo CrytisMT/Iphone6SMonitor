@@ -57,12 +57,12 @@ public class IPhoneController {
         HashMap<String, IPhoneStatus> statusResult = Maps.newHashMap();
         cnIPhoneEnum[] cnIPhoneEnums = cnIPhoneEnum.values();
         hkIPhoneEnum[] hkIPhoneEnums = hkIPhoneEnum.values();
-        generateJSON(statusResult, cnIPhoneEnums);
-        generateJSON(statusResult, hkIPhoneEnums);
+        setOnlineStatusToMap(statusResult, cnIPhoneEnums);
+        setOnlineStatusToMap(statusResult, hkIPhoneEnums);
         return statusResult;
     }
 
-    private void generateJSON(HashMap<String, IPhoneStatus> statusResult, IPhoneEnum[] iPhoneEnums) {
+    private void setOnlineStatusToMap(HashMap<String, IPhoneStatus> statusResult, IPhoneEnum[] iPhoneEnums) {
         for (IPhoneEnum iPhoneEnum : iPhoneEnums) {
             String partName = iPhoneEnum.getPartNumber();
             IPhoneStatus iPhoneStatus = new IPhoneStatus();
