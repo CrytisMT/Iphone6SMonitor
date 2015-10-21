@@ -19,10 +19,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Crytis on 2015/10/9.
@@ -30,8 +27,11 @@ import java.util.Map;
  */
 @Service
 public class TaskServiceImpl implements TaskService {
-    private final static String hkStoreOnlineUrl = "http://www.apple.com/hk-zh/shop/updateSummary";
-    private final static String cnStoreOnlineUrl = "http://www.apple.com/cn/shop/updateSummary";
+
+    private final static String hkOnlineUrl = "http://www.apple.com/hk-zh/shop/updateSummary";
+    private final static String cnOnlineUrl = "http://www.apple.com/cn/shop/updateSummary";
+    private final static String cnAppleStoreJsonUrl = "https://reserve.cdn-apple.com/CN/zh_CN/reserve/iPhone/availability.json";
+    private final static String hkAppleStoreJsonUrl = "https://reserve.cdn-apple.com/HK/zh_HK/reserve/iPhone/availability.json";
     // todo test用注解 不知道spring行不
     @Autowired
     JSONService jsonService;
@@ -77,11 +77,11 @@ public class TaskServiceImpl implements TaskService {
     }
 
     /**
-     * 根据partNo刷新状态
+     * 根据partNo刷新状态,缓存调用
      * @param partNumber
      * @return
      */
-    public boolean refreshIPhoneOnlineStatus(String partNumber) {
+    public boolean getIPhoneOnlineStatus(String partNumber) {
         IPhoneEnum iphoneEnum = cnIPhoneEnum.Gold128.getEnumByPartName(partNumber) == null
                 ? hkIPhoneEnum.Gold128.getEnumByPartName(partNumber)
                 : cnIPhoneEnum.Gold128.getEnumByPartName(partNumber);
@@ -90,9 +90,9 @@ public class TaskServiceImpl implements TaskService {
 
         String url;
         if (cnIPhoneEnum.Gold128.getEnumByPartName(partNumber) != null) {
-            url = cnStoreOnlineUrl;
+            url = cnOnlineUrl;
         } else {
-            url = hkStoreOnlineUrl;
+            url = hkOnlineUrl;
         }
 
         String jsonResult = HttpRequestUtil.doGet(url, availableJSONParam, "UTF-8");
@@ -104,6 +104,27 @@ public class TaskServiceImpl implements TaskService {
         }
 
         return jsonService.isIPhoneOnlineAvailable(jsonResult);
+    }
+
+    /**
+     * 获取可售卖apple store
+     * @param partNumber
+     * @return
+     */
+    public Set<StoreEnum> getAppleStoreStatusByPartNO(String partNumber) {
+        String url;
+        if (cnIPhoneEnum.Gold128.getEnumByPartName(partNumber) != null) {
+            url = cnAppleStoreJsonUrl;
+        } else {
+            url = hkAppleStoreJsonUrl;
+        }
+        String json = HttpRequestUtil.doGet(url, new HashMap<String, String>(), "UTF-8");
+        if (json == null || "{}".equals(json)) {
+            return Sets.newHashSet();
+        }
+        HashMap<String, HashSet<StoreEnum>> parseResult = jsonService.parseStoreAvailableJson(json);
+
+        return parseResult.get(partNumber);
     }
 
     /**
