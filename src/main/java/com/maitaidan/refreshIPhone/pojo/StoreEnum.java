@@ -6,4 +6,5 @@ package com.maitaidan.refreshIPhone.pojo;
  */
 public interface StoreEnum {
 
+    String getStoreNo();
 }

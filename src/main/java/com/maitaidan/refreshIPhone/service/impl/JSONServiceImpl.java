@@ -7,10 +7,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.maitaidan.refreshIPhone.pojo.CNStoreEnum;
-import com.maitaidan.refreshIPhone.pojo.StoreEnum;
-import com.maitaidan.refreshIPhone.pojo.cnIPhoneEnum;
-import com.maitaidan.refreshIPhone.pojo.hkIPhoneEnum;
+import com.maitaidan.refreshIPhone.pojo.*;
 import com.maitaidan.refreshIPhone.service.JSONService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -45,14 +42,31 @@ public class JSONServiceImpl implements JSONService {
             iPhonePartNumbers.add(iPhoneEnums.getPartNumber());
         }
 
-
+        //todo 加入hk的商店
         CNStoreEnum[] cnStoreEnums = CNStoreEnum.values();
-        for (CNStoreEnum cnStoreEnum : cnStoreEnums) {
-            JsonElement storeStatus = jsonObject.get(cnStoreEnum.getStoreNo());
+        HKStoreEnum[] hkStoreEnums = HKStoreEnum.values();
+        doParse(jsonObject, iphoneInStoreStatus, iPhonePartNumbers, cnStoreEnums);
+        doParse(jsonObject, iphoneInStoreStatus, iPhonePartNumbers, hkStoreEnums);
+
+        return iphoneInStoreStatus;
+    }
+
+    /**
+     * 具体解析的方法
+     * @param jsonObject json转成的jsonObject
+     * @param iphoneInStoreStatus 存结果的map
+     * @param iPhonePartNumbers 存所有手机型号的list
+     * @param 手机枚举
+     */
+    private void doParse(JsonObject jsonObject, HashMap<String, HashSet<StoreEnum>> iphoneInStoreStatus, List<String> iPhonePartNumbers, StoreEnum[] storeEnums) {
+        for (StoreEnum storeEnum : storeEnums) {
+            //获取商店的iPhone状态
+            JsonElement storeStatus = jsonObject.get(storeEnum.getStoreNo());
             if (storeStatus == null) {
+                //如果没有这个商店就排除
                 continue;
             }
-            storeStatus.getAsJsonObject().remove("timeSlot").getAsJsonObject();
+            storeStatus.getAsJsonObject().remove("timeSlot");
             JsonObject storeStatusNew = storeStatus.getAsJsonObject();
 
             for (String iPhonePartNumber : iPhonePartNumbers) {
@@ -65,15 +79,13 @@ public class JSONServiceImpl implements JSONService {
                     }
                     if ("ALL".equalsIgnoreCase(status.getAsString())) {
                         //如果是all的话，加入store，再放入map
-                        availableStores.add(cnStoreEnum);
+                        availableStores.add(storeEnum);
                         iphoneInStoreStatus.put(iPhonePartNumber, availableStores);
                     }
 
                 }
             }
         }
-
-        return iphoneInStoreStatus;
     }
 
     /**

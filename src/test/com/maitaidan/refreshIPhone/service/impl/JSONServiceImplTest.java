@@ -63,7 +63,7 @@ public class JSONServiceImplTest {
                 "    },\n" +
                 "    \"MKUE2ZD/A\" : \"ALL\",\n" +
                 "    \"MKQT2ZD/A\" : \"ALL\",\n" +
-                "    \"MKQW2ZD/A\" : \"ALL\",\n" +
+                "    \"ML7C2CH/A\" : \"ALL\",\n" +
                 "    \"MKUG2ZD/A\" : \"NONE\",\n" +
                 "    \"MKQU2ZD/A\" : \"ALL\",\n" +
                 "    \"MKQR2ZD/A\" : \"ALL\",\n" +
