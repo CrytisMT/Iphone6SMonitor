@@ -35,7 +35,7 @@ public class CacheServiceImpl implements CacheService {
                 @Override
                 public Boolean load(String partNumber) throws Exception {
                     logger.info("刷新缓存");
-                    return taskService.flushIPhoneOnlineStatus(partNumber);
+                    return taskService.refreshIPhoneOnlineStatus(partNumber);
                 }
             });
 

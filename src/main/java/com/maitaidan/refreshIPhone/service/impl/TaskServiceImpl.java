@@ -76,7 +76,12 @@ public class TaskServiceImpl implements TaskService {
         return null;
     }
 
-    public boolean flushIPhoneOnlineStatus(String partNumber) {
+    /**
+     * 根据partNo刷新状态
+     * @param partNumber
+     * @return
+     */
+    public boolean refreshIPhoneOnlineStatus(String partNumber) {
         IPhoneEnum iphoneEnum = cnIPhoneEnum.Gold128.getEnumByPartName(partNumber) == null
                 ? hkIPhoneEnum.Gold128.getEnumByPartName(partNumber)
                 : cnIPhoneEnum.Gold128.getEnumByPartName(partNumber);
@@ -130,7 +135,7 @@ public class TaskServiceImpl implements TaskService {
                 } catch (MessagingException e) {
                     logger.error("发送邮件失败！{},{}", iPhoneTask, e);
                 }
-                logger.info("发送邮件！{}",iPhoneTask.getEmail());
+                logger.info("发送邮件！{}", iPhoneTask.getEmail());
                 javaMailSender.send(mimeMessage);
             } else {
                 logger.info("{}不可购买", partNumber);

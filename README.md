@@ -1,4 +1,4 @@
-# flushIphone6S
+# Iphone6SMonitor
 刷新iPhone6s库存
 
 学习使用

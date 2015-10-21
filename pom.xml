@@ -2,10 +2,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.maitaidan</groupId>
-    <artifactId>flushIphone6S</artifactId>
+    <artifactId>Iphone6SMonitor</artifactId>
     <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
-    <name>flushIphone6S Maven Webapp</name>
+    <name>Iphone6SMonitor Maven Webapp</name>
     <url>http://maven.apache.org</url>
 
     <dependencyManagement>
@@ -150,7 +150,7 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>flushIphone6S</finalName>
+        <finalName>Iphone6SMonitor</finalName>
         <plugins>
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>

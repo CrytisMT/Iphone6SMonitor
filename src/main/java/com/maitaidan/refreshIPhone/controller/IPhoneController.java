@@ -57,7 +57,7 @@ public class IPhoneController {
         HashMap<String, IPhoneStatus> statusResult = Maps.newHashMap();
         cnIPhoneEnum[] cnIPhoneEnums = cnIPhoneEnum.values();
         hkIPhoneEnum[] hkIPhoneEnums = hkIPhoneEnum.values();
-//        generateJSON(statusResult, cnIPhoneEnums);
+        generateJSON(statusResult, cnIPhoneEnums);
         generateJSON(statusResult, hkIPhoneEnums);
         return statusResult;
     }

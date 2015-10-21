@@ -18,5 +18,5 @@ public interface TaskService {
 
     Map<String, IPhoneStatus> getIPhoneAllStatus();
 
-    boolean flushIPhoneOnlineStatus(String partNumber);
+    boolean refreshIPhoneOnlineStatus(String partNumber);
 }

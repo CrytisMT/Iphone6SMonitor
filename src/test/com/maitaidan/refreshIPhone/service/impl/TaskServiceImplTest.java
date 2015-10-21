@@ -26,7 +26,7 @@ public class TaskServiceImplTest extends TestCase {
     @Test
     public void testFlushIPhoneOnlineStatus() throws Exception {
         TaskServiceImpl taskService = new TaskServiceImpl();
-        taskService.flushIPhoneOnlineStatus(hkIPhoneEnum.Gold128.getPartNumber());
+        taskService.refreshIPhoneOnlineStatus(hkIPhoneEnum.Gold128.getPartNumber());
 
 
     }
