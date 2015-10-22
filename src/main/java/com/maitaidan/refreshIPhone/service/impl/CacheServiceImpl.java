@@ -39,7 +39,7 @@ public class CacheServiceImpl implements CacheService {
             .expireAfterAccess(20, TimeUnit.MINUTES).build(new CacheLoader<String, Boolean>() {
                 @Override
                 public Boolean load(String partNumber) throws Exception {
-                    logger.info("刷新缓存");
+                    logger.info("刷新online缓存");
                     return taskService.getIPhoneOnlineStatus(partNumber);
                 }
             });
@@ -51,7 +51,7 @@ public class CacheServiceImpl implements CacheService {
             .expireAfterAccess(20, TimeUnit.MINUTES).build(new CacheLoader<String, Set<StoreEnum>>() {
                 @Override
                 public Set<StoreEnum> load(String partNumber) throws Exception {
-                    logger.info("刷新缓存");
+                    logger.info("刷新apple store缓存");
                     return taskService.getAppleStoreStatusByPartNO(partNumber);
                 }
             });

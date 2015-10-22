@@ -119,19 +119,20 @@ public class TaskServiceImpl implements TaskService {
             url = hkAppleStoreJsonUrl;
         }
         String json = HttpRequestUtil.doGet(url, new HashMap<String, String>(), "UTF-8");
-        if (json == null || "{}".equals(json)) {
+        if (json == null || "{}".equals(json)||json.length()==0) {
             return Sets.newHashSet();
         }
+        logger.info("json长度{}",json.length());
         HashMap<String, HashSet<StoreEnum>> parseResult = jsonService.parseStoreAvailableJson(json);
 
         return parseResult.get(partNumber);
     }
 
     /**
-     * 定时检测在线购买是否可以
+     * 定时检测在线购买任务是否可以
      */
     @Scheduled(fixedDelay = 3000)
-    public void isNeedIPhoneOnlineAvailable() {
+    public void checkOnlineTask() {
         logger.info("当前任务数量:{}", tasks.size());
         logger.info("当前任务：{}",tasks.toString());
         Iterator<IPhoneTask> it = tasks.iterator();

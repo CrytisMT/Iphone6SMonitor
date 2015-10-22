@@ -1,6 +1,8 @@
 package com.maitaidan.refreshIPhone.service.impl;
 
 import com.maitaidan.refreshIPhone.pojo.IPhoneTask;
+import com.maitaidan.refreshIPhone.pojo.StoreEnum;
+import com.maitaidan.refreshIPhone.pojo.cnIPhoneEnum;
 import com.maitaidan.refreshIPhone.pojo.hkIPhoneEnum;
 import junit.framework.TestCase;
 import org.junit.Test;
@@ -13,6 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import javax.annotation.Resource;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.util.Set;
 
 /**
  * Created by Crytis on 2015/10/15.
@@ -46,4 +49,11 @@ public class TaskServiceImplTest extends TestCase {
     }
 
 
+    @Test
+    public void testGetAppleStoreStatusByPartNO() throws Exception {
+        TaskServiceImpl taskService = new TaskServiceImpl();
+        Set<StoreEnum> store = taskService.getAppleStoreStatusByPartNO(cnIPhoneEnum.Gray16.getPartNumber());
+        System.out.println(store);
+
+    }
 }
