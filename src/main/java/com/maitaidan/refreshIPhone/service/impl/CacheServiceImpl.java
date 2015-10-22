@@ -1,10 +1,12 @@
 package com.maitaidan.refreshIPhone.service.impl;
 
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 
+import com.maitaidan.refreshIPhone.pojo.StoreEnum;
 import com.maitaidan.refreshIPhone.pojo.hkIPhoneEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,24 +32,39 @@ public class CacheServiceImpl implements CacheService {
 
     private Logger logger = LoggerFactory.getLogger(CacheServiceImpl.class);
 
-    private LoadingCache<String, Boolean> IPhoneOnlineStatusCache = CacheBuilder.newBuilder()
+    /**
+     * 在线购买缓存
+     */
+    private LoadingCache<String, Boolean> iPhoneOnlineStatusCache = CacheBuilder.newBuilder()
             .expireAfterAccess(20, TimeUnit.MINUTES).build(new CacheLoader<String, Boolean>() {
                 @Override
                 public Boolean load(String partNumber) throws Exception {
                     logger.info("刷新缓存");
-                    return taskService.refreshIPhoneOnlineStatus(partNumber);
+                    return taskService.getIPhoneOnlineStatus(partNumber);
+                }
+            });
+
+    /**
+     * apple store购买缓存
+     */
+    private LoadingCache<String, Set<StoreEnum>> appleStoreStatusCache = CacheBuilder.newBuilder()
+            .expireAfterAccess(20, TimeUnit.MINUTES).build(new CacheLoader<String, Set<StoreEnum>>() {
+                @Override
+                public Set<StoreEnum> load(String partNumber) throws Exception {
+                    logger.info("刷新缓存");
+                    return taskService.getAppleStoreStatusByPartNO(partNumber);
                 }
             });
 
     // public void addTaskCache(String email, IPhoneTask iPhoneTask) {
     // // TODO email是key，不支持同一个email多个任务
     // todo 手动刷新的功能
-    // IPhoneOnlineStatusCache.put(email, iPhoneTask);
+    // iPhoneOnlineStatusCache.put(email, iPhoneTask);
     // }
 
     public boolean isAvailableOnlineByPartNo(String partNumber) {
         try {
-            return IPhoneOnlineStatusCache.get(partNumber);
+            return iPhoneOnlineStatusCache.get(partNumber);
         } catch (ExecutionException e) {
             logger.error("获取task出错", e);
         }
@@ -55,24 +72,25 @@ public class CacheServiceImpl implements CacheService {
     }
 
     @Scheduled(fixedDelay = 60000)
-    public void refreshCache() {
+    public void refreshOnlineCache() {
         long time = System.currentTimeMillis();
         logger.info("定时任务刷新缓存，当前时间{}", time);
-        IPhoneOnlineStatusCache.invalidateAll();
+        iPhoneOnlineStatusCache.invalidateAll();
+        appleStoreStatusCache.invalidateAll();
         cnIPhoneEnum[] cnIPhoneEnums = cnIPhoneEnum.values();
         hkIPhoneEnum[] hkIPhoneEnums = hkIPhoneEnum.values();
 
         for (cnIPhoneEnum cnIPhoneEnum : cnIPhoneEnums) {
-            String partName = cnIPhoneEnum.getPartNumber();
+            String partNumber = cnIPhoneEnum.getPartNumber();
             // isAvailableOnlineByPartNo(partName);
-            HTTPThread httpThread = new HTTPThread(partName,IPhoneOnlineStatusCache);
+            HTTPThread httpThread = new HTTPThread(partNumber, iPhoneOnlineStatusCache, appleStoreStatusCache);
             Thread thread = new Thread(httpThread);
             thread.start();
         }
         for (hkIPhoneEnum hkIPhoneEnum : hkIPhoneEnums) {
             String partName = hkIPhoneEnum.getPartNumber();
             // isAvailableOnlineByPartNo(partName);
-            HTTPThread httpThread = new HTTPThread(partName, IPhoneOnlineStatusCache);
+            HTTPThread httpThread = new HTTPThread(partName, iPhoneOnlineStatusCache, appleStoreStatusCache);
             Thread thread = new Thread(httpThread);
             thread.start();
         }

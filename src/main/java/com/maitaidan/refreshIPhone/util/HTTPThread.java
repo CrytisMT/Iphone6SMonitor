@@ -1,10 +1,11 @@
 package com.maitaidan.refreshIPhone.util;
 
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
+import com.maitaidan.refreshIPhone.pojo.StoreEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 import com.google.common.cache.LoadingCache;
 
@@ -16,15 +17,17 @@ public class HTTPThread implements Runnable {
     private Logger logger = LoggerFactory.getLogger(HTTPThread.class);
 
     private String partNumber;
-    private LoadingCache<String, Boolean> IPhoneOnlineStatusCache;
+    private LoadingCache<String, Boolean> iPhoneOnlineStatusCache;
+    private LoadingCache<String, Set<StoreEnum>> appleStoreStatusCache;
 
     public HTTPThread() {
     }
 
-    public HTTPThread(String partNumber,LoadingCache<String,Boolean> loadingCache) {
+    public HTTPThread(String partNumber,LoadingCache<String,Boolean> loadingCache,LoadingCache<String, Set<StoreEnum>> appleStoreStatusCache) {
         super();
         this.partNumber = partNumber;
-        this.IPhoneOnlineStatusCache = loadingCache;
+        this.iPhoneOnlineStatusCache = loadingCache;
+        this.appleStoreStatusCache = appleStoreStatusCache;
     }
 
     public String getPartNumber() {
@@ -37,7 +40,8 @@ public class HTTPThread implements Runnable {
 
     public void run() {
         try {
-            IPhoneOnlineStatusCache.get(partNumber);
+            iPhoneOnlineStatusCache.get(partNumber);
+            appleStoreStatusCache.get(partNumber);
         } catch (ExecutionException e) {
             logger.error("多线程刷新异常",e);
         }

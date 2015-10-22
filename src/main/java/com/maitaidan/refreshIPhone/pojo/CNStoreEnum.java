@@ -4,7 +4,7 @@ package com.maitaidan.refreshIPhone.pojo;
  * Created by xinyu.jiang on 2015/10/12.
  * 大陆apple store
  */
-public enum CNStoreEnum {
+public enum CNStoreEnum implements StoreEnum{
 
     BeijingXiDan("R320","北京","西单大悦城"),
     BeijingSanLiTun("R388","北京","三里屯"),
