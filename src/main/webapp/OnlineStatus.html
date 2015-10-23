@@ -14,7 +14,12 @@
     function getOnlineStatus() {
         $.getJSON("onlineStatus", function showStatus(data) {
             for (var key in data) {
-                $(".cn_online_status").append(data[key].iphoneName).append("是否可以购买：").append(data[key].online).append("购买链接:"+data[key].buyingUrl).append("<br/>");
+                $(".cn_online_status").append(data[key].iphoneName).append("是否可以购买：");
+                if (data[key].online) {
+                    $(".cn_online_status").append("<h3 style='display: inline'>YES</h3>").append("    购买链接:<a target=&quot;_blank&quot; href='"+data[key].buyingUrl+"'>"+data[key].buyingUrl+"</a>").append("<br/>");
+                } else {
+                    $(".cn_online_status").append("<h3 style='display: inline'>NO</h3>").append("    购买链接:<a target=&quot;_blank&quot; href='"+data[key].buyingUrl+"'>"+data[key].buyingUrl+"</a>").append("<br/>");
+                }
             }
         })
     }

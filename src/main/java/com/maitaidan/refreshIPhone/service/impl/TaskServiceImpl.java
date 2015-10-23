@@ -23,7 +23,6 @@ import java.util.*;
 
 /**
  * Created by Crytis on 2015/10/9.
- *
  */
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -78,6 +77,7 @@ public class TaskServiceImpl implements TaskService {
 
     /**
      * 根据partNo刷新状态,缓存调用
+     *
      * @param partNumber
      * @return
      */
@@ -108,6 +108,7 @@ public class TaskServiceImpl implements TaskService {
 
     /**
      * 获取可售卖apple store
+     *
      * @param partNumber
      * @return
      */
@@ -119,12 +120,16 @@ public class TaskServiceImpl implements TaskService {
             url = hkAppleStoreJsonUrl;
         }
         String json = HttpRequestUtil.doGet(url, new HashMap<String, String>(), "UTF-8");
-        if (json == null || "{}".equals(json)||json.length()==0) {
+        if (json == null || "{}".equals(json) || json.length() <= 10) {
+            logger.info("store错误的json：{}", json);
             return Sets.newHashSet();
         }
-        logger.info("json长度{}",json.length());
+        logger.info("json长度{}", json.length());
         HashMap<String, HashSet<StoreEnum>> parseResult = jsonService.parseStoreAvailableJson(json);
-
+        if (parseResult.get(partNumber) == null) {
+            logger.error("获取store失败,{},{}", partNumber, parseResult);
+            return Sets.newHashSet();
+        }
         return parseResult.get(partNumber);
     }
 
@@ -134,7 +139,7 @@ public class TaskServiceImpl implements TaskService {
     @Scheduled(fixedDelay = 3000)
     public void checkOnlineTask() {
         logger.info("当前任务数量:{}", tasks.size());
-        logger.info("当前任务：{}",tasks.toString());
+        logger.info("当前任务：{}", tasks.toString());
         Iterator<IPhoneTask> it = tasks.iterator();
         while (it.hasNext()) {
             IPhoneTask iPhoneTask = it.next();

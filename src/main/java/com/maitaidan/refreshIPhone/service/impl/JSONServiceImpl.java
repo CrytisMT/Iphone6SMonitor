@@ -25,6 +25,11 @@ import java.util.List;
 public class JSONServiceImpl implements JSONService {
     private Logger logger = LoggerFactory.getLogger(JSONServiceImpl.class);
 
+    /**
+     * 解析json
+     * @param json
+     * @return key 手机型号 value：可购买的store，set
+     */
     public HashMap<String, HashSet<StoreEnum>> parseStoreAvailableJson(String json) {
         JsonParser jsonParser = new JsonParser();
         JsonElement jsonElement = jsonParser.parse(json);
@@ -56,7 +61,6 @@ public class JSONServiceImpl implements JSONService {
      * @param jsonObject json转成的jsonObject
      * @param iphoneInStoreStatus 存结果的map
      * @param iPhonePartNumbers 存所有手机型号的list
-     * @param 手机枚举
      */
     private void doParse(JsonObject jsonObject, HashMap<String, HashSet<StoreEnum>> iphoneInStoreStatus, List<String> iPhonePartNumbers, StoreEnum[] storeEnums) {
         for (StoreEnum storeEnum : storeEnums) {

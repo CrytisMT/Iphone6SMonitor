@@ -1,10 +1,7 @@
 package com.maitaidan.refreshIPhone.controller;
 
 import com.google.common.collect.Maps;
-import com.maitaidan.refreshIPhone.pojo.IPhoneEnum;
-import com.maitaidan.refreshIPhone.pojo.IPhoneStatus;
-import com.maitaidan.refreshIPhone.pojo.cnIPhoneEnum;
-import com.maitaidan.refreshIPhone.pojo.hkIPhoneEnum;
+import com.maitaidan.refreshIPhone.pojo.*;
 import com.maitaidan.refreshIPhone.service.CacheService;
 import com.maitaidan.refreshIPhone.service.TaskService;
 import org.apache.commons.lang.StringUtils;
@@ -15,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 
 @Controller
@@ -53,8 +50,8 @@ public class IPhoneController {
 
     @RequestMapping("onlineStatus")
     @ResponseBody
-    public Map<String, IPhoneStatus> getonlineStatus() {
-        HashMap<String, IPhoneStatus> statusResult = Maps.newHashMap();
+    public Map<String, IPhoneStatus> getOnlineStatus() {
+        TreeMap<String, IPhoneStatus> statusResult = Maps.newTreeMap();
         cnIPhoneEnum[] cnIPhoneEnums = cnIPhoneEnum.values();
         hkIPhoneEnum[] hkIPhoneEnums = hkIPhoneEnum.values();
         setOnlineStatusToMap(statusResult, cnIPhoneEnums);
@@ -62,11 +59,17 @@ public class IPhoneController {
         return statusResult;
     }
 
-    private void setOnlineStatusToMap(HashMap<String, IPhoneStatus> statusResult, IPhoneEnum[] iPhoneEnums) {
+    private void setOnlineStatusToMap(TreeMap<String, IPhoneStatus> statusResult, IPhoneEnum[] iPhoneEnums) {
         for (IPhoneEnum iPhoneEnum : iPhoneEnums) {
             String partName = iPhoneEnum.getPartNumber();
             IPhoneStatus iPhoneStatus = new IPhoneStatus();
-            iPhoneStatus.setIphoneName(iPhoneEnum.getName());
+            String buyingUrl = IPhoneTask.generateBuyingUrl(iPhoneEnum);
+            iPhoneStatus.setBuyingUrl(buyingUrl);
+            if (buyingUrl.contains("hk")) {
+                iPhoneStatus.setIphoneName("【港行】" + iPhoneEnum.getName());
+            } else {
+                iPhoneStatus.setIphoneName("【国行】" + iPhoneEnum.getName());
+            }
             iPhoneStatus.setPartNumer(partName);
             iPhoneStatus.setIsOnline(cacheService.isAvailableOnlineByPartNo(partName));
             statusResult.put(partName, iPhoneStatus);
