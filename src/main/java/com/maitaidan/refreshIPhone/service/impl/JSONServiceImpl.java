@@ -27,6 +27,7 @@ public class JSONServiceImpl implements JSONService {
 
     /**
      * 解析json
+     *
      * @param json
      * @return key 手机型号 value：可购买的store，set
      */
@@ -52,15 +53,15 @@ public class JSONServiceImpl implements JSONService {
         HKStoreEnum[] hkStoreEnums = HKStoreEnum.values();
         doParse(jsonObject, iphoneInStoreStatus, iPhonePartNumbers, cnStoreEnums);
         doParse(jsonObject, iphoneInStoreStatus, iPhonePartNumbers, hkStoreEnums);
-
         return iphoneInStoreStatus;
     }
 
     /**
      * 具体解析的方法
-     * @param jsonObject json转成的jsonObject
+     *
+     * @param jsonObject          json转成的jsonObject
      * @param iphoneInStoreStatus 存结果的map
-     * @param iPhonePartNumbers 存所有手机型号的list
+     * @param iPhonePartNumbers   存所有手机型号的list
      */
     private void doParse(JsonObject jsonObject, HashMap<String, HashSet<StoreEnum>> iphoneInStoreStatus, List<String> iPhonePartNumbers, StoreEnum[] storeEnums) {
         for (StoreEnum storeEnum : storeEnums) {
@@ -84,9 +85,10 @@ public class JSONServiceImpl implements JSONService {
                     if ("ALL".equalsIgnoreCase(status.getAsString())) {
                         //如果是all的话，加入store，再放入map
                         availableStores.add(storeEnum);
-                        iphoneInStoreStatus.put(iPhonePartNumber, availableStores);
+                    } else {
+                        //如果是node，直接把set放入，之前忘了导致一直是null key
                     }
-
+                    iphoneInStoreStatus.put(iPhonePartNumber, availableStores);
                 }
             }
         }
