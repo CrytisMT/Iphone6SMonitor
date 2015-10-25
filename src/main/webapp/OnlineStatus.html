@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>在线购买状态</title>
+    <meta http-equiv="refresh" content="20">
     <script type="application/javascript" src="js/jquery-1.11.3.min.js"></script>
 
 </head>
@@ -18,7 +19,7 @@
                 if (data[key].online) {
                     $(".cn_online_status").append("<h3 style='display: inline'>YES</h3>").append("    购买链接:<a target=&quot;_blank&quot; href='"+data[key].buyingUrl+"'>"+data[key].buyingUrl+"</a>").append("<br/>");
                 } else {
-                    $(".cn_online_status").append("<h3 style='display: inline'>NO</h3>").append("    购买链接:<a target=&quot;_blank&quot; href='"+data[key].buyingUrl+"'>"+data[key].buyingUrl+"</a>").append("<br/>");
+                    $(".cn_online_status").append("<h3 style='display: inline;color: red'>NO</h3>").append("    购买链接:<a target=&quot;_blank&quot; href='"+data[key].buyingUrl+"'>"+data[key].buyingUrl+"</a>").append("<br/>");
                 }
             }
         })
