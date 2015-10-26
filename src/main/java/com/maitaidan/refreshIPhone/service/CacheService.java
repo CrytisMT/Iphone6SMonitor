@@ -1,9 +1,9 @@
 package com.maitaidan.refreshIPhone.service;
 
+import com.maitaidan.refreshIPhone.pojo.StoreEnum;
+
 import java.util.Map;
 import java.util.Set;
-
-import com.maitaidan.refreshIPhone.pojo.StoreEnum;
 
 /**
  * Created by xinyu.jiang on 2015/10/9.
@@ -15,6 +15,6 @@ public interface CacheService {
 
     Map<String, Boolean> getOnlineCache();
 
-    Map<String, Set<StoreEnum>> getStoreTasks();
+    Map<String, Set<StoreEnum>> getStoreCache();
 
 }

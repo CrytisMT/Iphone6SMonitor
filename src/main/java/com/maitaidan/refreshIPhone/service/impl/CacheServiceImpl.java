@@ -37,7 +37,7 @@ public class CacheServiceImpl implements CacheService {
      * 在线购买缓存
      * key:partNumber value:能否在线购买
      */
-    private LoadingCache<String, Boolean> iPhoneOnlineStatusCache = CacheBuilder.newBuilder()
+    private LoadingCache<String, Boolean> onlineStatusCache = CacheBuilder.newBuilder()
             .expireAfterAccess(20, TimeUnit.MINUTES).build(new CacheLoader<String, Boolean>() {
                 @Override
                 public Boolean load(String partNumber) throws Exception {
@@ -50,7 +50,7 @@ public class CacheServiceImpl implements CacheService {
      * apple store购买缓存
      * key:partNumber   可以购买的store
      */
-    private LoadingCache<String, Set<StoreEnum>> appleStoreStatusCache = CacheBuilder.newBuilder()
+    private LoadingCache<String, Set<StoreEnum>> storeStatusCache = CacheBuilder.newBuilder()
             .expireAfterAccess(20, TimeUnit.MINUTES).build(new CacheLoader<String, Set<StoreEnum>>() {
                 @Override
                 public Set<StoreEnum> load(String partNumber) throws Exception {
@@ -62,7 +62,7 @@ public class CacheServiceImpl implements CacheService {
 
     public boolean isAvailableOnlineByPartNo(String partNumber) {
         try {
-            return iPhoneOnlineStatusCache.get(partNumber);
+            return onlineStatusCache.get(partNumber);
         } catch (ExecutionException e) {
             logger.error("获取task出错", e);
         }
@@ -70,33 +70,33 @@ public class CacheServiceImpl implements CacheService {
     }
 
     public Map<String, Boolean> getOnlineCache() {
-        return iPhoneOnlineStatusCache.asMap();
+        return onlineStatusCache.asMap();
     }
 
-    public Map<String, Set<StoreEnum>> getStoreTasks() {
-        return appleStoreStatusCache.asMap();
+    public Map<String, Set<StoreEnum>> getStoreCache() {
+        return storeStatusCache.asMap();
     }
 
     @Scheduled(fixedDelay = 60000)
     public void refreshOnlineCache() {
         long time = System.currentTimeMillis();
         logger.info("定时任务刷新缓存，当前时间{}", time);
-        iPhoneOnlineStatusCache.invalidateAll();
-        appleStoreStatusCache.invalidateAll();
+        onlineStatusCache.invalidateAll();
+        storeStatusCache.invalidateAll();
         cnIPhoneEnum[] cnIPhoneEnums = cnIPhoneEnum.values();
         hkIPhoneEnum[] hkIPhoneEnums = hkIPhoneEnum.values();
 
         for (cnIPhoneEnum cnIPhoneEnum : cnIPhoneEnums) {
             String partNumber = cnIPhoneEnum.getPartNumber();
             // isAvailableOnlineByPartNo(partName);
-            HTTPThread httpThread = new HTTPThread(partNumber, iPhoneOnlineStatusCache, appleStoreStatusCache);
+            HTTPThread httpThread = new HTTPThread(partNumber, onlineStatusCache, storeStatusCache);
             Thread thread = new Thread(httpThread);
             thread.start();
         }
         for (hkIPhoneEnum hkIPhoneEnum : hkIPhoneEnums) {
             String partName = hkIPhoneEnum.getPartNumber();
             // isAvailableOnlineByPartNo(partName);
-            HTTPThread httpThread = new HTTPThread(partName, iPhoneOnlineStatusCache, appleStoreStatusCache);
+            HTTPThread httpThread = new HTTPThread(partName, onlineStatusCache, storeStatusCache);
             Thread thread = new Thread(httpThread);
             thread.start();
         }

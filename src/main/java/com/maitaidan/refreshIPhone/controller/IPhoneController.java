@@ -1,6 +1,5 @@
 package com.maitaidan.refreshIPhone.controller;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -19,19 +18,19 @@ import com.maitaidan.refreshIPhone.pojo.*;
 import com.maitaidan.refreshIPhone.service.CacheService;
 import com.maitaidan.refreshIPhone.service.TaskService;
 
-
 @Controller
 public class IPhoneController {
 
-    private Logger logger = LoggerFactory.getLogger(IPhoneController.class);
     @Resource
     TaskService taskService;
     @Resource
     CacheService cacheService;
+    private Logger logger = LoggerFactory.getLogger(IPhoneController.class);
 
     @RequestMapping(value = "addOnlineTask", produces = "application/x-www-form-urlencoded; charset=UTF-8")
     @ResponseBody
-    public String addOnlineTask(String email, String keyword, String region, String IPhoneColor, String IPhoneScreenSize, String IPhoneCapacity) {
+    public String addOnlineTask(String email, String keyword, String region, String IPhoneColor,
+            String IPhoneScreenSize, String IPhoneCapacity) {
         if (StringUtils.isBlank(email)) {
             return "email是必填项";
         }
@@ -51,7 +50,6 @@ public class IPhoneController {
         return "添加在线购买监控任务成功！";
     }
 
-
     @RequestMapping("onlineStatus")
     @ResponseBody
     public Map<String, IPhoneStatus> getOnlineStatus() {
@@ -63,10 +61,16 @@ public class IPhoneController {
         return statusResult;
     }
 
+    @RequestMapping("storeStatus")
+    @ResponseBody
+    public Map getStoreStatus() {
+        return cacheService.getStoreCache();
+    }
 
     @RequestMapping("onlineTaskList")
     @ResponseBody
     public Set onlineTaskList() {
+
         return taskService.getAllOnlineTasks();
     }
 
