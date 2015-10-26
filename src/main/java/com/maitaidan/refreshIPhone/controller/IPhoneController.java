@@ -1,9 +1,12 @@
 package com.maitaidan.refreshIPhone.controller;
 
-import com.google.common.collect.Maps;
-import com.maitaidan.refreshIPhone.pojo.*;
-import com.maitaidan.refreshIPhone.service.CacheService;
-import com.maitaidan.refreshIPhone.service.TaskService;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+
+import javax.annotation.Resource;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,9 +14,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.Resource;
-import java.util.Map;
-import java.util.TreeMap;
+import com.google.common.collect.Maps;
+import com.maitaidan.refreshIPhone.pojo.*;
+import com.maitaidan.refreshIPhone.service.CacheService;
+import com.maitaidan.refreshIPhone.service.TaskService;
 
 
 @Controller
@@ -57,6 +61,19 @@ public class IPhoneController {
         setOnlineStatusToMap(statusResult, cnIPhoneEnums);
         setOnlineStatusToMap(statusResult, hkIPhoneEnums);
         return statusResult;
+    }
+
+
+    @RequestMapping("onlineTaskList")
+    @ResponseBody
+    public Set onlineTaskList() {
+        return taskService.getAllOnlineTasks();
+    }
+
+    @RequestMapping("storeTaskList")
+    @ResponseBody
+    public Set storeTaskList() {
+        return taskService.getAllStoreTasks();
     }
 
     private void setOnlineStatusToMap(TreeMap<String, IPhoneStatus> statusResult, IPhoneEnum[] iPhoneEnums) {

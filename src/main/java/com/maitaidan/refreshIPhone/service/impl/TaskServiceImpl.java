@@ -1,12 +1,11 @@
 package com.maitaidan.refreshIPhone.service.impl;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.maitaidan.refreshIPhone.pojo.*;
-import com.maitaidan.refreshIPhone.service.CacheService;
-import com.maitaidan.refreshIPhone.service.JSONService;
-import com.maitaidan.refreshIPhone.service.TaskService;
-import com.maitaidan.refreshIPhone.util.HttpRequestUtil;
+import java.util.*;
+
+import javax.annotation.Resource;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,10 +15,13 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import java.util.*;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.maitaidan.refreshIPhone.pojo.*;
+import com.maitaidan.refreshIPhone.service.CacheService;
+import com.maitaidan.refreshIPhone.service.JSONService;
+import com.maitaidan.refreshIPhone.service.TaskService;
+import com.maitaidan.refreshIPhone.util.HttpRequestUtil;
 
 /**
  * Created by Crytis on 2015/10/9.
@@ -40,14 +42,19 @@ public class TaskServiceImpl implements TaskService {
     JavaMailSenderImpl javaMailSender;
 
     private Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
-    private HashSet<IPhoneTask> tasks = Sets.newHashSet();
+    private HashSet<IPhoneTask> onlineTasks = Sets.newHashSet();
+    private HashSet<IPhoneTask> storeTasks = Sets.newHashSet();
 
     public void addTask(String email, IPhoneTask iPhoneTask) {
 
     }
 
-    public IPhoneTask getTask(String email) {
-        return null;
+    public HashSet<IPhoneTask> getAllOnlineTasks() {
+        return onlineTasks;
+    }
+
+    public HashSet<IPhoneTask> getAllStoreTasks() {
+        return storeTasks;
     }
 
     public Map getIPhoneStatus() {
@@ -138,9 +145,9 @@ public class TaskServiceImpl implements TaskService {
      */
     @Scheduled(fixedDelay = 3000)
     public void checkOnlineTask() {
-        logger.info("当前任务数量:{}", tasks.size());
-        logger.info("当前任务：{}", tasks.toString());
-        Iterator<IPhoneTask> it = tasks.iterator();
+        logger.info("当前任务数量:{}", onlineTasks.size());
+        logger.info("当前任务：{}", onlineTasks.toString());
+        Iterator<IPhoneTask> it = onlineTasks.iterator();
         while (it.hasNext()) {
             IPhoneTask iPhoneTask = it.next();
             String partNumber = iPhoneTask.getiPhone().getPartNumber();
@@ -176,9 +183,9 @@ public class TaskServiceImpl implements TaskService {
             logger.error("地区是空");
         }
         if ("hk".equalsIgnoreCase(region)) {
-            tasks.add(new IPhoneTask("", email, hkIPhoneEnum.Gold128.getEnumByPartName(partNumber)));
+            onlineTasks.add(new IPhoneTask("", email, hkIPhoneEnum.Gold128.getEnumByPartName(partNumber)));
         } else if ("cn".equalsIgnoreCase(region)) {
-            tasks.add(new IPhoneTask("", email, cnIPhoneEnum.Gold128.getEnumByPartName(partNumber)));
+            onlineTasks.add(new IPhoneTask("", email, cnIPhoneEnum.Gold128.getEnumByPartName(partNumber)));
         } else {
             logger.error("地区错误:{}", region);
         }

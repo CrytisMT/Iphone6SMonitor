@@ -1,5 +1,6 @@
 package com.maitaidan.refreshIPhone.service.impl;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -34,6 +35,7 @@ public class CacheServiceImpl implements CacheService {
 
     /**
      * 在线购买缓存
+     * key:partNumber value:能否在线购买
      */
     private LoadingCache<String, Boolean> iPhoneOnlineStatusCache = CacheBuilder.newBuilder()
             .expireAfterAccess(20, TimeUnit.MINUTES).build(new CacheLoader<String, Boolean>() {
@@ -46,6 +48,7 @@ public class CacheServiceImpl implements CacheService {
 
     /**
      * apple store购买缓存
+     * key:partNumber   可以购买的store
      */
     private LoadingCache<String, Set<StoreEnum>> appleStoreStatusCache = CacheBuilder.newBuilder()
             .expireAfterAccess(20, TimeUnit.MINUTES).build(new CacheLoader<String, Set<StoreEnum>>() {
@@ -56,11 +59,6 @@ public class CacheServiceImpl implements CacheService {
                 }
             });
 
-    // public void addTaskCache(String email, IPhoneTask iPhoneTask) {
-    // // TODO email是key，不支持同一个email多个任务
-    // todo 手动刷新的功能
-    // iPhoneOnlineStatusCache.put(email, iPhoneTask);
-    // }
 
     public boolean isAvailableOnlineByPartNo(String partNumber) {
         try {
@@ -69,6 +67,14 @@ public class CacheServiceImpl implements CacheService {
             logger.error("获取task出错", e);
         }
         return false;
+    }
+
+    public Map<String, Boolean> getOnlineCache() {
+        return iPhoneOnlineStatusCache.asMap();
+    }
+
+    public Map<String, Set<StoreEnum>> getStoreTasks() {
+        return appleStoreStatusCache.asMap();
     }
 
     @Scheduled(fixedDelay = 60000)

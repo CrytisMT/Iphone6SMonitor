@@ -1,5 +1,6 @@
 package com.maitaidan.refreshIPhone.service;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,9 +15,11 @@ public interface TaskService {
 
     void addTask(String email, IPhoneTask iPhoneTask);
 
-    void addOnlineTask(String partNumber,String region,String email);
+    void addOnlineTask(String partNumber, String region, String email);
 
-    IPhoneTask getTask(String email);
+    HashSet<IPhoneTask> getAllOnlineTasks();
+
+    HashSet<IPhoneTask> getAllStoreTasks();
 
     Map getIPhoneStatus();
 
