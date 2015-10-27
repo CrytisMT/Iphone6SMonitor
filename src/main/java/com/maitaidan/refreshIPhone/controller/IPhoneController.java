@@ -29,12 +29,35 @@ public class IPhoneController {
 
     @RequestMapping(value = "addOnlineTask", produces = "application/x-www-form-urlencoded; charset=UTF-8")
     @ResponseBody
-    public String addOnlineTask(String email, String keyword, String region, String IPhoneColor,
-            String IPhoneScreenSize, String IPhoneCapacity) {
+    public String addOnlineTask(String email, String region, String IPhoneColor, String IPhoneScreenSize,
+            String IPhoneCapacity) {
         if (StringUtils.isBlank(email)) {
             return "email是必填项";
         }
-        logger.info("参数:{},{},{}", email, keyword, region);
+        logger.info("参数:{},{}", email, region);
+        IPhoneEnum iPhone = null;
+        if ("hk".equalsIgnoreCase(region)) {
+            iPhone = hkIPhoneEnum.Gold128.getEnumByParam(IPhoneColor, IPhoneCapacity, IPhoneScreenSize);
+        } else if ("cn".equalsIgnoreCase(region)) {
+            iPhone = cnIPhoneEnum.Gold128.getEnumByParam(IPhoneColor, IPhoneCapacity, IPhoneScreenSize);
+        }
+        if (iPhone == null) {
+            logger.error("获取不到iPhone型号！");
+            return "获取不到iPhone型号！";
+        }
+
+        taskService.addOnlineTask(iPhone.getPartNumber(), region, email);
+        return "添加在线购买监控任务成功！";
+    }
+
+    @RequestMapping(value = "addStoreTask", produces = "application/x-www-form-urlencoded; charset=UTF-8")
+    @ResponseBody
+    public String addStoreTask(String email, String store, String region, String IPhoneColor, String IPhoneScreenSize,
+            String IPhoneCapacity) {
+        if (StringUtils.isBlank(email) || StringUtils.isBlank(store)) {
+            return "email,store是必填项";
+        }
+        logger.info("参数:{},{}", email, region);
         IPhoneEnum iPhone = null;
         if ("hk".equalsIgnoreCase(region)) {
             iPhone = hkIPhoneEnum.Gold128.getEnumByParam(IPhoneColor, IPhoneCapacity, IPhoneScreenSize);
@@ -70,7 +93,6 @@ public class IPhoneController {
     @RequestMapping("onlineTaskList")
     @ResponseBody
     public Set onlineTaskList() {
-
         return taskService.getAllOnlineTasks();
     }
 

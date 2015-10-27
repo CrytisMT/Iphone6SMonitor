@@ -2,45 +2,125 @@
 <head>
     <meta charset="UTF-8">
     <title>添加任务</title>
-    <script type="application/javascript" src="js/jquery-1.11.3.min.js"></script>
+    <!--<script type="application/javascript" src="js/jquery-1.11.3.min.js"></script>-->
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </head>
 <body>
 <h2>添加在线购买监控</h2>
+<div>
+    <label>添加在线购买监视任务</label>
+</div>
+<form id="addOnlineTaskForm" class="form-inline" method="post">
+    <div class="form-group">
+        <label for="email">email(必填)</label>
+        <input class=".form-control" id="email" name="email" type="text">
+    </div>
+    <!--<div class="form-group">-->
+        <!--<label for="keyword">关键词</label>-->
+        <!--<input class=".form-control" id="keyword" name="keyword" type="text">-->
+    <!--</div>-->
+    <div class="form-group">
+        <label for="region">版本</label>
+        <select id="region" class=".form-control" name="region">
+            <option value="cn">国行</option>
+            <option value="hk">港行</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="IPhoneScreenSize">手机型号</label>
+        <select id="IPhoneScreenSize" class=".form-control"
+                name="IPhoneScreenSize">
+            <option value="4_7inch">6S</option>
+            <option value="5_5inch">6S Plus</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="IPhoneColor">手机颜色</label>
+        <select id="IPhoneColor" name="IPhoneColor">
+            <option value="space_gray">天空灰</option>
+            <option value="gold">土豪金</option>
+            <option value="silver">银色</option>
+            <option value="rosegld">玫瑰金</option>
+        </select>
+    </div>
+    <div class="form-group"><label for="IPhoneCapacity">手机容量</label>
+        <select id="IPhoneCapacity" name="IPhoneCapacity">
+            <option value="16gb">16GB</option>
+            <option value="64gb">64GB</option>
+            <option value="128gb">128GB</option>
+        </select>
+    </div>
+    <input type="button" class="btn btn-default" onclick="doSubmit(1)" value="提交">
+</form>
 
-<form id="addTaskForm" action="/addOnlineTask" method="post">
-    email(*)<input id="email" name="email" type="text">
-    关键词<input id="keyword" name="keyword" type="text">
-    版本<select name="region">
-    <option value="cn">国行</option>
-    <option value="hk">港行</option>
-</select>
-    手机型号<select name="IPhoneScreenSize">
-    <option value="4_7inch">6s</option>
-    <option value="5_5inch">6s Plus</option>
-</select>
-    手机颜色<select name="IPhoneColor">
-    <option value="space_gray">天空灰</option>
-    <option value="gold">土豪金</option>
-    <option value="silver">银色</option>
-    <option value="rosegld">玫瑰金</option>
-</select>
-    手机容量<select name="IPhoneCapacity">
-    <option value="16gb">16GB</option>
-    <option value="64gb">64GB</option>
-    <option value="128gb">128GB</option>
-
-</select>
-    <input type="button" onclick="doSubmit()" value="提交">
+<div>
+    <label>添加Store自提监视任务</label>
+</div>
+<form id="addStoreTaskForm" class="form-inline" method="post">
+    <div class="form-group">
+        <label for="storeEmail">email(必填)</label>
+        <input class=".form-control" id="storeEmail" name="email" type="text">
+    </div>
+    <!--<div class="form-group">-->
+        <!--<label for="keyword">关键词</label>-->
+        <!--<input class=".form-control" id="keyword" name="keyword" type="text">-->
+    <!--</div>-->
+    <div class="form-group">
+        <label for="storeRegion">版本</label>
+        <select id="storeRegion" class=".form-control" name="region">
+            <option value="cn">国行</option>
+            <option value="hk">港行</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="storeIPhoneScreenSize">手机型号</label>
+        <select id="storeIPhoneScreenSize" class=".form-control"
+                name="IPhoneScreenSize">
+            <option value="4_7inch">6S</option>
+            <option value="5_5inch">6S Plus</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="storeIPhoneColor">手机颜色</label>
+        <select id="storeIPhoneColor" name="IPhoneColor">
+            <option value="space_gray">天空灰</option>
+            <option value="gold">土豪金</option>
+            <option value="silver">银色</option>
+            <option value="rosegld">玫瑰金</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="storeIPhoneCapacity">手机容量</label>
+        <select id="storeIPhoneCapacity" name="IPhoneCapacity">
+            <option value="16gb">16GB</option>
+            <option value="64gb">64GB</option>
+            <option value="128gb">128GB</option>
+        </select>
+    </div>
+    <input type="button" class="btn btn-default" onclick="doSubmit(2)" value="提交">
 </form>
 <a href="OnlineStatus.html">在线购买状态查看</a>
-<script type="application/javascript">function doSubmit() {
+<script type="application/javascript">function doSubmit(type) {
+    var subUrl;
+    var formID;
+    if(type===1) {
+        subUrl = "/addOnlineTask";
+        formID = "#addOnlineTaskForm";
+    }else if(type===2) {
+        subUrl = "/addStoreTask";
+        formID = "#addStoreTaskForm";
+    }
+
     $.ajax({
         cache: false,
         type: "POST",
-        url: "/addOnlineTask", //把表单数据发送到ajax.jsp
-        data: $('#addTaskForm').serialize(), //要发送的是ajaxFrm表单中的数据
+        url: subUrl, //把表单数据发送到ajax.jsp
+        data: $(formID).serialize(), //要发送的是ajaxFrm表单中的数据
         async: false,
-        error: function (request) {
+        error: function () {
             alert("添加任务失败！");
         },
         success: function (data) {
