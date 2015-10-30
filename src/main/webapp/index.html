@@ -10,6 +10,7 @@
 </head>
 <body>
 <h2>添加在线购买监控</h2>
+
 <div>
     <label>添加在线购买监视任务</label>
 </div>
@@ -19,8 +20,8 @@
         <input class=".form-control" id="email" name="email" type="text">
     </div>
     <!--<div class="form-group">-->
-        <!--<label for="keyword">关键词</label>-->
-        <!--<input class=".form-control" id="keyword" name="keyword" type="text">-->
+    <!--<label for="keyword">关键词</label>-->
+    <!--<input class=".form-control" id="keyword" name="keyword" type="text">-->
     <!--</div>-->
     <div class="form-group">
         <label for="region">版本</label>
@@ -65,8 +66,8 @@
         <input class=".form-control" id="storeEmail" name="email" type="text">
     </div>
     <!--<div class="form-group">-->
-        <!--<label for="keyword">关键词</label>-->
-        <!--<input class=".form-control" id="keyword" name="keyword" type="text">-->
+    <!--<label for="keyword">关键词</label>-->
+    <!--<input class=".form-control" id="keyword" name="keyword" type="text">-->
     <!--</div>-->
     <div class="form-group">
         <label for="storeRegion">版本</label>
@@ -100,16 +101,38 @@
             <option value="128gb">128GB</option>
         </select>
     </div>
+    <div id="cnStore">
+        <input name="storeNO" type="checkbox" value="R320"><label>北京-西单大悦城</label>
+        <input name="storeNO" type="checkbox" value="R388"><label>北京-三里屯</label>
+        <input name="storeNO" type="checkbox" value="R448"><label>北京-王府井</label>
+        <input name="storeNO" type="checkbox" value="R479"><label>北京-华贸购物中心</label>
+        <input name="storeNO" type="checkbox" value="R359"><label>上海-南京东路</label>
+        <input name="storeNO" type="checkbox" value="R389"><label>上海-浦东</label>
+        <input name="storeNO" type="checkbox" value="R390"><label>上海-香港广场</label>
+        <input name="storeNO" type="checkbox" value="R401"><label>上海-环贸 iapm</label>
+        <input name="storeNO" type="checkbox" value="R643"><label>南京-虹悦城</label>
+        <input name="storeNO" type="checkbox" value="R637"><label>天津-大悦城</label>
+        <input name="storeNO" type="checkbox" value="R502"><label>成都-万象城</label>
+        <input name="storeNO" type="checkbox" value="R574"><label>无锡-恒隆广场</label>
+        <input name="storeNO" type="checkbox" value="R471"><label>杭州-西湖</label>
+        <input name="storeNO" type="checkbox" value="R532"><label>杭州-万象城</label>
+        <input name="storeNO" type="checkbox" value="R534"><label>沈阳-中街大悦城</label>
+        <input name="storeNO" type="checkbox" value="R484"><label>深圳-益田假日广场</label>
+        <input name="storeNO" type="checkbox" value="R572"><label>郑州-万象城</label>
+        <input name="storeNO" type="checkbox" value="R476"><label>重庆-北城天街</label>
+        <input id="storeNO1" name="storeNO" type="checkbox" value="R480"/><label for="storeNO1">重庆-解放碑</label>
+        <input name="storeNO" type="checkbox" value="R573"><label>重庆-万象城</label>
+    </div>
     <input type="button" class="btn btn-default" onclick="doSubmit(2)" value="提交">
 </form>
 <a href="OnlineStatus.html">在线购买状态查看</a>
 <script type="application/javascript">function doSubmit(type) {
     var subUrl;
     var formID;
-    if(type===1) {
+    if (type === 1) {
         subUrl = "/addOnlineTask";
         formID = "#addOnlineTaskForm";
-    }else if(type===2) {
+    } else if (type === 2) {
         subUrl = "/addStoreTask";
         formID = "#addStoreTaskForm";
     }
