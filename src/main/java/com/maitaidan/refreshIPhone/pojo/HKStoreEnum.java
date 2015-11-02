@@ -9,7 +9,7 @@ public enum HKStoreEnum implements StoreEnum {
     CantonRoad("R499", "香港", "CantonRoad"),
     CausewayBay("R409", "香港", "CausewayBay"),
     FestivalWalk("R485", "香港", "FestivalWalk"),
-    ifcmall("R428", "香港", "ifcmall");
+    ifcmall("R428", "香港", "ifc mall");
 
     private String storeNo;
     private String city;
