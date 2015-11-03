@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.maitaidan.refreshIPhone.pojo.IPhoneStatus;
-import com.maitaidan.refreshIPhone.pojo.IPhoneTask;
+import com.maitaidan.refreshIPhone.pojo.onlineTask;
 import com.maitaidan.refreshIPhone.pojo.StoreEnum;
 
 /**
@@ -15,9 +15,9 @@ public interface TaskService {
 
     void addOnlineTask(String partNumber, String region, String email);
 
-    HashSet<IPhoneTask> getAllOnlineTasks();
+    HashSet<onlineTask> getAllOnlineTasks();
 
-    HashSet<IPhoneTask> getAllStoreTasks();
+    HashSet<onlineTask> getAllStoreTasks();
 
     Map getIPhoneStatus();
 

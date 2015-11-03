@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.maitaidan.refreshIPhone.pojo.*;
 import com.maitaidan.refreshIPhone.service.CacheService;
 import com.maitaidan.refreshIPhone.service.TaskService;
+import com.maitaidan.refreshIPhone.util.OtherUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,7 +108,7 @@ public class IPhoneController {
         for (IPhoneEnum iPhoneEnum : iPhoneEnums) {
             String partName = iPhoneEnum.getPartNumber();
             IPhoneStatus iPhoneStatus = new IPhoneStatus();
-            String buyingUrl = IPhoneTask.generateBuyingUrl(iPhoneEnum);
+            String buyingUrl = OtherUtils.generateBuyingUrl(iPhoneEnum);
             iPhoneStatus.setBuyingUrl(buyingUrl);
             if (buyingUrl.contains("hk")) {
                 iPhoneStatus.setIphoneName("【港行】" + iPhoneEnum.getName());

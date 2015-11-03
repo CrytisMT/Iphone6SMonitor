@@ -1,6 +1,6 @@
 package com.maitaidan.refreshIPhone.service.impl;
 
-import com.maitaidan.refreshIPhone.pojo.IPhoneTask;
+import com.maitaidan.refreshIPhone.pojo.onlineTask;
 import com.maitaidan.refreshIPhone.pojo.StoreEnum;
 import com.maitaidan.refreshIPhone.pojo.cnIPhoneEnum;
 import com.maitaidan.refreshIPhone.pojo.hkIPhoneEnum;
@@ -36,14 +36,14 @@ public class TaskServiceImplTest extends TestCase {
 
     @Test
     public void testMail() throws MessagingException {
-        IPhoneTask iPhoneTask = new IPhoneTask("dd", "ddd", hkIPhoneEnum.Gold128);
-        iPhoneTask.setBuyingUrl("http://www.baidu.com");
+        onlineTask onlineTask = new onlineTask("ddd", hkIPhoneEnum.Gold128);
+        onlineTask.setBuyingUrl("http://www.baidu.com");
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
         helper.setTo("38006766@qq.com");
         helper.setSubject("您预订的iPhone有货啦！");
         helper.setFrom(javaMailSender.getUsername());
-        String content = "Hi!<br/>你所关注的" + iPhoneTask.getiPhone().getName() + "已经有货可以在线购买了！购买链接：<a href=\"" + iPhoneTask.getBuyingUrl() + "\">购买传送门！</a>" + "<br/>Powered By www.maitaidan.com";
+        String content = "Hi!<br/>你所关注的" + onlineTask.getiPhone().getName() + "已经有货可以在线购买了！购买链接：<a href=\"" + onlineTask.getBuyingUrl() + "\">购买传送门！</a>" + "<br/>Powered By www.maitaidan.com";
         helper.setText(content, true);
         javaMailSender.send(mimeMessage);
     }

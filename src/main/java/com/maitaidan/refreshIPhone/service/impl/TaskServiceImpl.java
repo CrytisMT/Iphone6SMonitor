@@ -42,14 +42,14 @@ public class TaskServiceImpl implements TaskService {
     JavaMailSenderImpl javaMailSender;
 
     private Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
-    private HashSet<IPhoneTask> onlineTasks = Sets.newHashSet();
-    private HashSet<IPhoneTask> storeTasks = Sets.newHashSet();
+    private HashSet<onlineTask> onlineTasks = Sets.newHashSet();
+    private HashSet<onlineTask> storeTasks = Sets.newHashSet();
 
-    public HashSet<IPhoneTask> getAllOnlineTasks() {
+    public HashSet<onlineTask> getAllOnlineTasks() {
         return onlineTasks;
     }
 
-    public HashSet<IPhoneTask> getAllStoreTasks() {
+    public HashSet<onlineTask> getAllStoreTasks() {
         return storeTasks;
     }
 
@@ -141,9 +141,9 @@ public class TaskServiceImpl implements TaskService {
             logger.error("地区是空");
         }
         if ("hk".equalsIgnoreCase(region)) {
-            onlineTasks.add(new IPhoneTask(email, hkIPhoneEnum.Gold128.getEnumByPartName(partNumber)));
+            onlineTasks.add(new onlineTask(email, hkIPhoneEnum.Gold128.getEnumByPartName(partNumber)));
         } else if ("cn".equalsIgnoreCase(region)) {
-            onlineTasks.add(new IPhoneTask(email, cnIPhoneEnum.Gold128.getEnumByPartName(partNumber)));
+            onlineTasks.add(new onlineTask(email, cnIPhoneEnum.Gold128.getEnumByPartName(partNumber)));
         } else {
             logger.error("地区错误:{}", region);
         }
@@ -161,10 +161,10 @@ public class TaskServiceImpl implements TaskService {
     public void checkOnlineTask() {
         logger.info("当前任务数量:{}", onlineTasks.size());
         logger.info("当前任务：{}", onlineTasks.toString());
-        Iterator<IPhoneTask> it = onlineTasks.iterator();
+        Iterator<onlineTask> it = onlineTasks.iterator();
         while (it.hasNext()) {
-            IPhoneTask iPhoneTask = it.next();
-            String partNumber = iPhoneTask.getiPhone().getPartNumber();
+            onlineTask onlineTask = it.next();
+            String partNumber = onlineTask.getiPhone().getPartNumber();
             boolean isOK = cacheService.isAvailableOnlineByPartNo(partNumber);
             if (isOK) {
 
@@ -172,17 +172,17 @@ public class TaskServiceImpl implements TaskService {
                 MimeMessage mimeMessage = javaMailSender.createMimeMessage();
                 MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
                 try {
-                    helper.setTo(iPhoneTask.getEmail());
+                    helper.setTo(onlineTask.getEmail());
                     helper.setSubject("你好！你关注的iPhone有货了！");
                     helper.setFrom("麦钛蛋IPhone6S监控");
-                    String content = "Hi!<br/>你所关注的" + iPhoneTask.getiPhone().getName() + "已经有货可以在线购买了！购买链接：<a href=\""
-                            + iPhoneTask.getBuyingUrl() + "\">购买传送门！</a>" + "<br/>Powered By www.maitaidan.com";
+                    String content = "Hi!<br/>你所关注的" + onlineTask.getiPhone().getName() + "已经有货可以在线购买了！购买链接：<a href=\""
+                            + onlineTask.getBuyingUrl() + "\">购买传送门！</a>" + "<br/>Powered By www.maitaidan.com";
                     helper.setText(content, true);
 
-                    logger.info("发送邮件！{}", iPhoneTask.getEmail());
+                    logger.info("发送邮件！{}", onlineTask.getEmail());
                     javaMailSender.send(mimeMessage);
                 } catch (MessagingException e) {
-                    logger.error("发送邮件失败！{},{}", iPhoneTask, e);
+                    logger.error("发送邮件失败！{},{}", onlineTask, e);
                 }
                 // 如果可以买了，发邮件，清除任务
                 it.remove();
