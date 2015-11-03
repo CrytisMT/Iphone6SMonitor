@@ -161,16 +161,17 @@ public class TaskServiceImpl implements TaskService {
                     helper.setTo(iPhoneTask.getEmail());
                     helper.setSubject("你好！你关注的iPhone有货了！");
                     helper.setFrom("麦钛蛋IPhone6S监控");
-                    String content = "Hi!<br/>你所关注的" + iPhoneTask.getiPhone().getName() + "已经有货可以在线购买了！购买链接：<a href=\"" + iPhoneTask.getBuyingUrl() + "\">购买传送门！</a>" + "<br/>Powered By www.maitaidan.com";
+                    String content = "Hi!<br/>你所关注的" + iPhoneTask.getiPhone().getName() + "已经有货可以在线购买了！购买链接：<a href=\""
+                            + iPhoneTask.getBuyingUrl() + "\">购买传送门！</a>" + "<br/>Powered By www.maitaidan.com";
                     helper.setText(content, true);
 
-                    // 如果可以买了，发邮件，清除任务
-                    it.remove();
+                    logger.info("发送邮件！{}", iPhoneTask.getEmail());
+                    javaMailSender.send(mimeMessage);
                 } catch (MessagingException e) {
                     logger.error("发送邮件失败！{},{}", iPhoneTask, e);
                 }
-                logger.info("发送邮件！{}", iPhoneTask.getEmail());
-                javaMailSender.send(mimeMessage);
+                // 如果可以买了，发邮件，清除任务
+                it.remove();
             } else {
                 logger.info("{}不可购买", partNumber);
             }
