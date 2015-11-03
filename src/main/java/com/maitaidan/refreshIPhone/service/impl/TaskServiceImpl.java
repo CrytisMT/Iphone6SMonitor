@@ -33,7 +33,7 @@ public class TaskServiceImpl implements TaskService {
     private final static String cnOnlineUrl = "http://www.apple.com/cn/shop/updateSummary";
     private final static String cnAppleStoreJsonUrl = "https://reserve.cdn-apple.com/CN/zh_CN/reserve/iPhone/availability.json";
     private final static String hkAppleStoreJsonUrl = "https://reserve.cdn-apple.com/HK/zh_HK/reserve/iPhone/availability.json";
-    // todo test用注解 不知道spring行不
+
     @Autowired
     JSONService jsonService;
     @Resource
@@ -44,10 +44,6 @@ public class TaskServiceImpl implements TaskService {
     private Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
     private HashSet<IPhoneTask> onlineTasks = Sets.newHashSet();
     private HashSet<IPhoneTask> storeTasks = Sets.newHashSet();
-
-    public void addTask(String email, IPhoneTask iPhoneTask) {
-
-    }
 
     public HashSet<IPhoneTask> getAllOnlineTasks() {
         return onlineTasks;
@@ -140,10 +136,28 @@ public class TaskServiceImpl implements TaskService {
         return parseResult.get(partNumber);
     }
 
+    public void addOnlineTask(String partNumber, String region, String email) {
+        if (StringUtils.isBlank(region)) {
+            logger.error("地区是空");
+        }
+        if ("hk".equalsIgnoreCase(region)) {
+            onlineTasks.add(new IPhoneTask(email, hkIPhoneEnum.Gold128.getEnumByPartName(partNumber)));
+        } else if ("cn".equalsIgnoreCase(region)) {
+            onlineTasks.add(new IPhoneTask(email, cnIPhoneEnum.Gold128.getEnumByPartName(partNumber)));
+        } else {
+            logger.error("地区错误:{}", region);
+        }
+    }
+
+    public void addStoreTask(String partNumber, String region, String email, String[] storeNO) {
+
+
+    }
+
     /**
      * 定时检测在线购买任务是否可以
      */
-    @Scheduled(fixedDelay = 3000)
+    @Scheduled(fixedDelay = 30000)
     public void checkOnlineTask() {
         logger.info("当前任务数量:{}", onlineTasks.size());
         logger.info("当前任务：{}", onlineTasks.toString());
@@ -176,19 +190,6 @@ public class TaskServiceImpl implements TaskService {
                 logger.info("{}不可购买", partNumber);
             }
 
-        }
-    }
-
-    public void addOnlineTask(String partNumber, String region, String email) {
-        if (StringUtils.isBlank(region)) {
-            logger.error("地区是空");
-        }
-        if ("hk".equalsIgnoreCase(region)) {
-            onlineTasks.add(new IPhoneTask("", email, hkIPhoneEnum.Gold128.getEnumByPartName(partNumber)));
-        } else if ("cn".equalsIgnoreCase(region)) {
-            onlineTasks.add(new IPhoneTask("", email, cnIPhoneEnum.Gold128.getEnumByPartName(partNumber)));
-        } else {
-            logger.error("地区错误:{}", region);
         }
     }
 

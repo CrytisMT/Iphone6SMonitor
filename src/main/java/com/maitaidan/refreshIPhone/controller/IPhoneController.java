@@ -1,11 +1,9 @@
 package com.maitaidan.refreshIPhone.controller;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-
-import javax.annotation.Resource;
-
+import com.google.common.collect.Maps;
+import com.maitaidan.refreshIPhone.pojo.*;
+import com.maitaidan.refreshIPhone.service.CacheService;
+import com.maitaidan.refreshIPhone.service.TaskService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,10 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.google.common.collect.Maps;
-import com.maitaidan.refreshIPhone.pojo.*;
-import com.maitaidan.refreshIPhone.service.CacheService;
-import com.maitaidan.refreshIPhone.service.TaskService;
+import javax.annotation.Resource;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 
 @Controller
 public class IPhoneController {
@@ -30,7 +28,7 @@ public class IPhoneController {
     @RequestMapping(value = "addOnlineTask", produces = "application/x-www-form-urlencoded; charset=UTF-8")
     @ResponseBody
     public String addOnlineTask(String email, String region, String IPhoneColor, String IPhoneScreenSize,
-            String IPhoneCapacity) {
+                                String IPhoneCapacity) {
         if (StringUtils.isBlank(email)) {
             return "email是必填项";
         }
@@ -52,12 +50,15 @@ public class IPhoneController {
 
     @RequestMapping(value = "addStoreTask", produces = "application/x-www-form-urlencoded; charset=UTF-8")
     @ResponseBody
-    public String addStoreTask(String email, String store, String region, String IPhoneColor, String IPhoneScreenSize,
-            String IPhoneCapacity) {
-        if (StringUtils.isBlank(email) || StringUtils.isBlank(store)) {
+    public String addStoreTask(String email, String region, String IPhoneColor, String IPhoneScreenSize,
+                               String IPhoneCapacity, String[] storeNO) {
+        if (StringUtils.isBlank(email)) {
             return "email,store是必填项";
         }
-        logger.info("参数:{},{}", email, region);
+        if (storeNO.length == 0) {
+            return "请至少选择一个apple store！";
+        }
+        logger.info("参数:{},{},store个数{}", email, region, storeNO.length);
         IPhoneEnum iPhone = null;
         if ("hk".equalsIgnoreCase(region)) {
             iPhone = hkIPhoneEnum.Gold128.getEnumByParam(IPhoneColor, IPhoneCapacity, IPhoneScreenSize);
@@ -69,8 +70,8 @@ public class IPhoneController {
             return "获取不到iPhone型号！";
         }
 
-        taskService.addOnlineTask(iPhone.getPartNumber(), region, email);
-        return "添加在线购买监控任务成功！";
+        taskService.addStoreTask(iPhone.getPartNumber(), region, email, storeNO);
+        return "添加AppleStore监控任务成功！";
     }
 
     @RequestMapping("onlineStatus")

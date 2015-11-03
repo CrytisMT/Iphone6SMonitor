@@ -13,8 +13,6 @@ import com.maitaidan.refreshIPhone.pojo.StoreEnum;
  */
 public interface TaskService {
 
-    void addTask(String email, IPhoneTask iPhoneTask);
-
     void addOnlineTask(String partNumber, String region, String email);
 
     HashSet<IPhoneTask> getAllOnlineTasks();
@@ -28,4 +26,6 @@ public interface TaskService {
     boolean getIPhoneOnlineStatus(String partNumber);
 
     Set<StoreEnum> getAppleStoreStatusByPartNO(String partNumber);
+
+    void addStoreTask(String partNumber, String region, String email, String[] storeNO);
 }
