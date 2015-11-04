@@ -43,19 +43,16 @@ public class TaskServiceImpl implements TaskService {
 
     private Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
     private HashSet<onlineTask> onlineTasks = Sets.newHashSet();
-    private HashSet<onlineTask> storeTasks = Sets.newHashSet();
+    private HashSet<storeTask> storeTasks = Sets.newHashSet();
 
     public HashSet<onlineTask> getAllOnlineTasks() {
         return onlineTasks;
     }
 
-    public HashSet<onlineTask> getAllStoreTasks() {
+    public HashSet<storeTask> getAllStoreTasks() {
         return storeTasks;
     }
 
-    public Map getIPhoneStatus() {
-        return null;
-    }
 
     /**
      * 获取所有的iphone售卖状态
@@ -150,7 +147,13 @@ public class TaskServiceImpl implements TaskService {
     }
 
     public void addStoreTask(String partNumber, String region, String email, String[] storeNO) {
-
+        if ("hk".equalsIgnoreCase(region)) {
+            storeTasks.add(new storeTask(email, hkIPhoneEnum.Gold128.getEnumByPartName(partNumber),storeNO,region));
+        } else if ("cn".equalsIgnoreCase(region)) {
+            storeTasks.add(new storeTask(email, cnIPhoneEnum.Gold128.getEnumByPartName(partNumber),storeNO,region));
+        } else {
+            logger.error("地区错误:{}", region);
+        }
 
     }
 

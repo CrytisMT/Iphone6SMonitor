@@ -94,12 +94,12 @@ public class storeTask {
         this.stores = stores;
     }
 
-    public storeTask(String email, IPhoneEnum iPhone, String buyingUrl, String[] stores, String region) {
+    public storeTask(String email, IPhoneEnum iPhone, String[] stores, String region) {
 
         this.email = email;
         this.iPhone = iPhone;
-        this.buyingUrl = buyingUrl;
         this.stores = stores;
         this.region = region;
+        this.buyingUrl = OtherUtils.generateBuyingUrl(iPhone);
     }
 }

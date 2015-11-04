@@ -7,6 +7,7 @@ import java.util.Set;
 import com.maitaidan.refreshIPhone.pojo.IPhoneStatus;
 import com.maitaidan.refreshIPhone.pojo.onlineTask;
 import com.maitaidan.refreshIPhone.pojo.StoreEnum;
+import com.maitaidan.refreshIPhone.pojo.storeTask;
 
 /**
  * Created by xinyu.jiang on 2015/10/9.
@@ -17,9 +18,7 @@ public interface TaskService {
 
     HashSet<onlineTask> getAllOnlineTasks();
 
-    HashSet<onlineTask> getAllStoreTasks();
-
-    Map getIPhoneStatus();
+    HashSet<storeTask> getAllStoreTasks();
 
     Map<String, IPhoneStatus> getIPhoneAllStatus();
 
