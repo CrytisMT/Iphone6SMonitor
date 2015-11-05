@@ -217,7 +217,7 @@ public class TaskServiceImpl implements TaskService {
             String[] storeNos = storeTask.getStores();
             Set<StoreEnum> availableStores = cacheService.getAvailableStoresByPartNo(partNumber);
             //要求的store和缓存的有没有交集
-            if (storeNos.length <= 0) {
+            if (storeNos.length <= 0 || availableStores.size() <= 0) {
                 continue;
             }
             StringBuilder sb = new StringBuilder();
