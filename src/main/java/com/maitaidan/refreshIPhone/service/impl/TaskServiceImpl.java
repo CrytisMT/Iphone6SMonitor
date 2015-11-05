@@ -37,6 +37,8 @@ public class TaskServiceImpl implements TaskService {
     CacheService cacheService;
     @Resource
     JavaMailSenderImpl javaMailSender;
+    @Resource
+    StoreJSONCache storeJSONCache;
 
     private Logger logger = LoggerFactory.getLogger(TaskServiceImpl.class);
     private HashSet<onlineTask> onlineTasks = Sets.newHashSet();
@@ -110,13 +112,16 @@ public class TaskServiceImpl implements TaskService {
      * @return
      */
     public Set<StoreEnum> getAppleStoreStatusByPartNO(String partNumber) {
-        String url;
+//        String url;
+        String json;
         if (cnIPhoneEnum.Gold128.getEnumByPartName(partNumber) != null) {
-            url = cnAppleStoreJsonUrl;
+//            url = cnAppleStoreJsonUrl;
+            json = storeJSONCache.getCnJSON();
         } else {
-            url = hkAppleStoreJsonUrl;
+//            url = hkAppleStoreJsonUrl;
+            json = storeJSONCache.getHkJSON();
         }
-        String json = HttpRequestUtil.doGet(url, new HashMap<String, String>(), "UTF-8");
+        //String json = HttpRequestUtil.doGet(url, new HashMap<String, String>(), "UTF-8");
         if (json == null || "{}".equals(json) || json.length() <= 10) {
             logger.info("store错误的json：{}", json);
             return Sets.newHashSet();
