@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
 
+import com.google.common.collect.Sets;
 import com.maitaidan.refreshIPhone.pojo.StoreEnum;
 import com.maitaidan.refreshIPhone.pojo.hkIPhoneEnum;
 import org.slf4j.Logger;
@@ -69,6 +70,16 @@ public class CacheServiceImpl implements CacheService {
         return false;
     }
 
+
+    public Set<StoreEnum> getAvailableStoresByPartNo(String partNumber) {
+        try {
+            return storeStatusCache.get(partNumber);
+        } catch (ExecutionException e) {
+            logger.error("获取task出错", e);
+        }
+        return Sets.newHashSet();
+    }
+
     public Map<String, Boolean> getOnlineCache() {
         return onlineStatusCache.asMap();
     }
@@ -78,7 +89,7 @@ public class CacheServiceImpl implements CacheService {
     }
 
     @Scheduled(fixedDelay = 60000)
-    public void refreshOnlineCache() {
+    public void refreshCache() {
         long time = System.currentTimeMillis();
         logger.info("定时任务刷新缓存，当前时间{}", time);
         onlineStatusCache.invalidateAll();

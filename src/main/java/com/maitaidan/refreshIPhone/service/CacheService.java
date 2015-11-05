@@ -13,6 +13,8 @@ public interface CacheService {
 
     boolean isAvailableOnlineByPartNo(String partNumber);
 
+    Set<StoreEnum> getAvailableStoresByPartNo(String partNumber);
+
     Map<String, Boolean> getOnlineCache();
 
     Map<String, Set<StoreEnum>> getStoreCache();

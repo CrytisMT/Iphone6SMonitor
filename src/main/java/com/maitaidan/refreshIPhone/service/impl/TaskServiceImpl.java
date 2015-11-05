@@ -1,11 +1,12 @@
 package com.maitaidan.refreshIPhone.service.impl;
 
-import java.util.*;
-
-import javax.annotation.Resource;
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.maitaidan.refreshIPhone.pojo.*;
+import com.maitaidan.refreshIPhone.service.CacheService;
+import com.maitaidan.refreshIPhone.service.JSONService;
+import com.maitaidan.refreshIPhone.service.TaskService;
+import com.maitaidan.refreshIPhone.util.HttpRequestUtil;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,13 +16,9 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.maitaidan.refreshIPhone.pojo.*;
-import com.maitaidan.refreshIPhone.service.CacheService;
-import com.maitaidan.refreshIPhone.service.JSONService;
-import com.maitaidan.refreshIPhone.service.TaskService;
-import com.maitaidan.refreshIPhone.util.HttpRequestUtil;
+import javax.annotation.Resource;
+import javax.mail.internet.MimeMessage;
+import java.util.*;
 
 /**
  * Created by Crytis on 2015/10/9.
@@ -148,9 +145,9 @@ public class TaskServiceImpl implements TaskService {
 
     public void addStoreTask(String partNumber, String region, String email, String[] storeNO) {
         if ("hk".equalsIgnoreCase(region)) {
-            storeTasks.add(new storeTask(email, hkIPhoneEnum.Gold128.getEnumByPartName(partNumber),storeNO,region));
+            storeTasks.add(new storeTask(email, hkIPhoneEnum.Gold128.getEnumByPartName(partNumber), storeNO, region));
         } else if ("cn".equalsIgnoreCase(region)) {
-            storeTasks.add(new storeTask(email, cnIPhoneEnum.Gold128.getEnumByPartName(partNumber),storeNO,region));
+            storeTasks.add(new storeTask(email, cnIPhoneEnum.Gold128.getEnumByPartName(partNumber), storeNO, region));
         } else {
             logger.error("地区错误:{}", region);
         }
@@ -162,8 +159,8 @@ public class TaskServiceImpl implements TaskService {
      */
     @Scheduled(fixedDelay = 30000)
     public void checkOnlineTask() {
-        logger.info("当前任务数量:{}", onlineTasks.size());
-        logger.info("当前任务：{}", onlineTasks.toString());
+        logger.info("当前online任务数量:{}", onlineTasks.size());
+        logger.info("当前online任务：{}", onlineTasks.toString());
         Iterator<onlineTask> it = onlineTasks.iterator();
         while (it.hasNext()) {
             onlineTask onlineTask = it.next();
@@ -171,28 +168,76 @@ public class TaskServiceImpl implements TaskService {
             boolean isOK = cacheService.isAvailableOnlineByPartNo(partNumber);
             if (isOK) {
 
-                logger.info("{}可以买了", partNumber);
-                MimeMessage mimeMessage = javaMailSender.createMimeMessage();
-                MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
-                try {
-                    helper.setTo(onlineTask.getEmail());
-                    helper.setSubject("你好！你关注的iPhone有货了！");
-                    helper.setFrom("麦钛蛋IPhone6S监控");
-                    String content = "Hi!<br/>你所关注的" + onlineTask.getiPhone().getName() + "已经有货可以在线购买了！购买链接：<a href=\""
-                            + onlineTask.getBuyingUrl() + "\">购买传送门！</a>" + "<br/>Powered By www.maitaidan.com";
-                    helper.setText(content, true);
+                logger.info("{}可以买了,发送邮件", partNumber);
 
-                    logger.info("发送邮件！{}", onlineTask.getEmail());
-                    javaMailSender.send(mimeMessage);
-                } catch (MessagingException e) {
-                    logger.error("发送邮件失败！{},{}", onlineTask, e);
+                String content = "Hi!<br/>你所关注的" + onlineTask.getiPhone().getName() + "已经有货可以在线购买了！购买链接：<a href=\""
+                        + onlineTask.getBuyingUrl() + "\">购买传送门！</a>" + "<br/>Powered By www.maitaidan.com";
+                boolean sentResult = notifyUserByEmail(onlineTask.getEmail(), content);
+                // 如果发邮件成功，清除任务
+                if (sentResult) {
+                    it.remove();
                 }
-                // 如果可以买了，发邮件，清除任务
-                it.remove();
             } else {
                 logger.info("{}不可购买", partNumber);
             }
 
+        }
+    }
+
+    private boolean notifyUserByEmail(String email, String content) {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
+        try {
+            helper.setTo(email);
+            helper.setSubject("你好！你关注的iPhone有货了！");
+            helper.setFrom("麦钛蛋IPhone6S监控");
+
+            helper.setText(content, true);
+
+            javaMailSender.send(mimeMessage);
+            logger.info("发送邮件成功！{}", email);
+            return true;
+        } catch (Exception e) {
+            logger.error("发送邮件失败！{},{}", email, e);
+            return false;
+        }
+    }
+
+    /**
+     * 定时检测store任务
+     */
+    @Scheduled(fixedDelay = 60000)
+    public void checkStoreTask() {
+        logger.info("当前store任务数量{},任务列表:{}", storeTasks.size(), storeTasks);
+        Iterator<storeTask> it = storeTasks.iterator();
+        while (it.hasNext()) {
+            Set<StoreEnum> okStores = Sets.newHashSet();
+            storeTask storeTask = it.next();
+            String partNumber = storeTask.getiPhone().getPartNumber();
+            String[] storeNos = storeTask.getStores();
+            Set<StoreEnum> availableStores = cacheService.getAvailableStoresByPartNo(partNumber);
+            //要求的store和缓存的有没有交集
+            if (storeNos.length <= 0) {
+                continue;
+            }
+            StringBuilder sb = new StringBuilder();
+            for (String storeNo : storeNos) {
+                for (StoreEnum currentStore : availableStores) {
+                    if (currentStore.getStoreNo().equalsIgnoreCase(storeNo)) {
+                        okStores.add(currentStore);
+                        sb.append(currentStore.getCity()).append(currentStore.getAddress()).append("  ");
+                    }
+                }
+                logger.info("当前email：{}符合条件的商店有：{}", storeTask.getEmail(), okStores);
+                //发邮件通知
+                String content = "Hi!<br/>你所关注的" + storeTask.getiPhone().getName() + "已经有货可以在线【预约】购买了！可以预约的商店：" + sb.toString() + "购买链接：<a href=\""
+                        + storeTask.getBuyingUrl() + "\">购买传送门！</a>" + "<br/>Powered By www.maitaidan.com";
+                boolean sentResult = notifyUserByEmail(storeTask.getEmail(), content);
+                if (sentResult) {
+                    logger.info("发送{}邮件成功，删除任务！", storeTask.getEmail());
+                    storeTasks.remove(storeTask);
+                }
+            }
         }
     }
 
