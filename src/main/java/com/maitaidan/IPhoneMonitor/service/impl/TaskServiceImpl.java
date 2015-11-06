@@ -1,12 +1,10 @@
 package com.maitaidan.IPhoneMonitor.service.impl;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
-import com.maitaidan.IPhoneMonitor.pojo.*;
-import com.maitaidan.IPhoneMonitor.service.CacheService;
-import com.maitaidan.IPhoneMonitor.service.JSONService;
-import com.maitaidan.IPhoneMonitor.service.TaskService;
-import com.maitaidan.IPhoneMonitor.util.HttpRequestUtil;
+import java.util.*;
+
+import javax.annotation.Resource;
+import javax.mail.internet.MimeMessage;
+
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,12 +14,17 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-import javax.mail.internet.MimeMessage;
-import java.util.*;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
+import com.maitaidan.IPhoneMonitor.pojo.*;
+import com.maitaidan.IPhoneMonitor.service.CacheService;
+import com.maitaidan.IPhoneMonitor.service.JSONService;
+import com.maitaidan.IPhoneMonitor.service.TaskService;
+import com.maitaidan.IPhoneMonitor.util.HttpRequestUtil;
 
 /**
  * Created by Crytis on 2015/10/9.
+ *
  */
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -51,7 +54,6 @@ public class TaskServiceImpl implements TaskService {
     public HashSet<storeTask> getAllStoreTasks() {
         return storeTasks;
     }
-
 
     /**
      * 获取所有的iphone售卖状态
@@ -112,16 +114,16 @@ public class TaskServiceImpl implements TaskService {
      * @return
      */
     public Set<StoreEnum> getAppleStoreStatusByPartNO(String partNumber) {
-//        String url;
+        // String url;
         String json;
         if (cnIPhoneEnum.Gold128.getEnumByPartName(partNumber) != null) {
-//            url = cnAppleStoreJsonUrl;
+            // url = cnAppleStoreJsonUrl;
             json = storeJSONCache.getCnJSON();
         } else {
-//            url = hkAppleStoreJsonUrl;
+            // url = hkAppleStoreJsonUrl;
             json = storeJSONCache.getHkJSON();
         }
-        //String json = HttpRequestUtil.doGet(url, new HashMap<String, String>(), "UTF-8");
+        // String json = HttpRequestUtil.doGet(url, new HashMap<String, String>(), "UTF-8");
         if (json == null || "{}".equals(json) || json.length() <= 10) {
             logger.info("store错误的json：{}", json);
             return Sets.newHashSet();
@@ -195,7 +197,7 @@ public class TaskServiceImpl implements TaskService {
         try {
             helper.setTo(email);
             helper.setSubject("你好！你关注的iPhone有货了！");
-            helper.setFrom("麦钛蛋IPhone6S监控");
+            helper.setFrom("maitaidan@163.com");
 
             helper.setText(content, true);
 
@@ -221,7 +223,7 @@ public class TaskServiceImpl implements TaskService {
             String partNumber = storeTask.getiPhone().getPartNumber();
             String[] storeNos = storeTask.getStores();
             Set<StoreEnum> availableStores = cacheService.getAvailableStoresByPartNo(partNumber);
-            //要求的store和缓存的有没有交集
+            // 要求的store和缓存的有没有交集
             if (storeNos.length <= 0 || availableStores.size() <= 0) {
                 continue;
             }
@@ -233,14 +235,17 @@ public class TaskServiceImpl implements TaskService {
                         sb.append(currentStore.getCity()).append(currentStore.getAddress()).append("  ");
                     }
                 }
-                logger.info("当前email：{}符合条件的商店有：{}", storeTask.getEmail(), okStores);
-                //发邮件通知
-                String content = "Hi!<br/>你所关注的" + storeTask.getiPhone().getName() + "已经有货可以在线【预约】购买了！可以预约的商店：" + sb.toString() + "购买链接：<a href=\""
-                        + storeTask.getBuyingUrl() + "\">购买传送门！</a>" + "<br/>Powered By www.maitaidan.com";
-                boolean sentResult = notifyUserByEmail(storeTask.getEmail(), content);
-                if (sentResult) {
-                    logger.info("发送{}邮件成功，删除任务！", storeTask.getEmail());
-                    storeTasks.remove(storeTask);
+                if (okStores.size() > 0) {
+                    logger.info("当前email：{}符合条件的商店有：{}", storeTask.getEmail(), okStores);
+                    // 发邮件通知
+                    String content = "Hi!<br/>你所关注的" + storeTask.getiPhone().getName() + "已经有货可以在线【预约】购买了！可以预约的商店："
+                            + sb.toString() + "购买链接：<a href=\"" + storeTask.getBuyingUrl() + "\">购买传送门！</a>"
+                            + "<br/>Powered By www.maitaidan.com";
+                    boolean sentResult = notifyUserByEmail(storeTask.getEmail(), content);
+                    if (sentResult) {
+                        logger.info("发送{}邮件成功，删除任务！", storeTask.getEmail());
+                        storeTasks.remove(storeTask);
+                    }
                 }
             }
         }
