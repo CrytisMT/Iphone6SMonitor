@@ -125,7 +125,7 @@ public class TaskServiceImpl implements TaskService {
         }
         // String json = HttpRequestUtil.doGet(url, new HashMap<String, String>(), "UTF-8");
         if (json == null || "{}".equals(json) || json.length() <= 10) {
-            logger.info("store错误的json：{}", json);
+            // logger.info("store错误的json：{}", json);
             return Sets.newHashSet();
         }
         logger.info("json长度{}", json.length());
@@ -227,6 +227,7 @@ public class TaskServiceImpl implements TaskService {
             if (storeNos.length <= 0 || availableStores.size() <= 0) {
                 continue;
             }
+            logger.info("各自的数量{},{}", Arrays.toString(storeNos), availableStores);
             StringBuilder sb = new StringBuilder();
             for (String storeNo : storeNos) {
                 for (StoreEnum currentStore : availableStores) {
@@ -235,17 +236,17 @@ public class TaskServiceImpl implements TaskService {
                         sb.append(currentStore.getCity()).append(currentStore.getAddress()).append("  ");
                     }
                 }
-                if (okStores.size() > 0) {
-                    logger.info("当前email：{}符合条件的商店有：{}", storeTask.getEmail(), okStores);
-                    // 发邮件通知
-                    String content = "Hi!<br/>你所关注的" + storeTask.getiPhone().getName() + "已经有货可以在线【预约】购买了！可以预约的商店："
-                            + sb.toString() + "购买链接：<a href=\"" + storeTask.getBuyingUrl() + "\">购买传送门！</a>"
-                            + "<br/>Powered By www.maitaidan.com";
-                    boolean sentResult = notifyUserByEmail(storeTask.getEmail(), content);
-                    if (sentResult) {
-                        logger.info("发送{}邮件成功，删除任务！", storeTask.getEmail());
-                        storeTasks.remove(storeTask);
-                    }
+            }
+            if (okStores.size() > 0) {
+                logger.info("当前email：{}符合条件的商店有：{}", storeTask.getEmail(), okStores);
+                // 发邮件通知
+                String content = "Hi!<br/>你所关注的" + storeTask.getiPhone().getName() + "已经有货可以在线【预约】购买了！可以预约的商店："
+                        + sb.toString() + "购买链接：<a href=\"" + storeTask.getBuyingUrl() + "\">购买传送门！</a>"
+                        + "<br/>Powered By www.maitaidan.com";
+                boolean sentResult = notifyUserByEmail(storeTask.getEmail(), content);
+                if (sentResult) {
+                    logger.info("发送{}邮件成功，删除任务！", storeTask.getEmail());
+                    storeTasks.remove(storeTask);
                 }
             }
         }
@@ -261,7 +262,7 @@ public class TaskServiceImpl implements TaskService {
         Param.put("option.dimensionColor", IPhoneType.getColor());
         Param.put("option.dimensionCapacity", IPhoneType.getCapacity());
         Param.put("product", IPhoneType.getPartNumber());
-        logger.info("请求在线购买json参数:{}", Param);
+        // logger.info("请求在线购买json参数:{}", Param);
     }
 
 }

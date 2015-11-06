@@ -1,11 +1,12 @@
 package com.maitaidan.IPhoneMonitor.service.impl;
 
-import com.maitaidan.IPhoneMonitor.util.HttpRequestUtil;
+import java.util.HashMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
+import com.maitaidan.IPhoneMonitor.util.HttpRequestUtil;
 
 /**
  * Created by Crytis on 2015/11/6.
@@ -55,13 +56,16 @@ public class StoreJSONCache {
                 //如果大于3分钟就是过期
                 //TODO 蛋疼
                 logger.info("store json过期了,{}",currentTime-time);
-                this.cnJSON = HttpRequestUtil.doGet(cnAppleStoreJsonUrl, new HashMap<String, String>(), "UTF-8");
-                this.hkJSON = HttpRequestUtil.doGet(hkAppleStoreJsonUrl, new HashMap<String, String>(), "UTF-8");
-                this.time = System.currentTimeMillis();
+                try {
+                    this.cnJSON = HttpRequestUtil.doGet(cnAppleStoreJsonUrl, new HashMap<String, String>(), "UTF-8");
+                    this.hkJSON = HttpRequestUtil.doGet(hkAppleStoreJsonUrl, new HashMap<String, String>(), "UTF-8");
+                    this.time = System.currentTimeMillis();
+                } catch (Exception e) {
+                    logger.error("获取store json失败");
+                }
                 return true;
             }
         }
         return false;
-
     }
 }
