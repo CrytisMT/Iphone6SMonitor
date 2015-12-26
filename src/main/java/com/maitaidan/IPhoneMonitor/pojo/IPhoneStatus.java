@@ -3,7 +3,7 @@ package com.maitaidan.IPhoneMonitor.pojo;
 import java.util.HashSet;
 
 /**
- * Created by xinyu.jiang on 2015/10/12.
+ * Created by Crytis on 2015/10/12.
  * 是否可以购买的状态
  */
 public class IPhoneStatus {

@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by xinyu.jiang on 2015/10/9.
+ * Created by Crytis on 2015/10/9.
  *
  */
 public interface CacheService {

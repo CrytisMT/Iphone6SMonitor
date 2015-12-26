@@ -10,7 +10,7 @@ import com.maitaidan.IPhoneMonitor.pojo.StoreEnum;
 import com.maitaidan.IPhoneMonitor.pojo.storeTask;
 
 /**
- * Created by xinyu.jiang on 2015/10/9.
+ * Created by Crytis on 2015/10/9.
  */
 public interface TaskService {
 

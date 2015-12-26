@@ -24,7 +24,7 @@ import com.maitaidan.IPhoneMonitor.service.TaskService;
 import com.maitaidan.IPhoneMonitor.util.HTTPThread;
 
 /**
- * Created by xinyu.jiang on 2015/10/9.
+ * Created by Crytis on 2015/10/9.
  */
 @Service
 public class CacheServiceImpl implements CacheService {

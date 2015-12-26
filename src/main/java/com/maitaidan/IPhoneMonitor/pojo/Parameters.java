@@ -1,7 +1,7 @@
 package com.maitaidan.IPhoneMonitor.pojo;
 
 /**
- * Created by xinyu.jiang on 2015/10/11.
+ * Created by Crytis on 2015/10/11.
  */
 public class Parameters {
 

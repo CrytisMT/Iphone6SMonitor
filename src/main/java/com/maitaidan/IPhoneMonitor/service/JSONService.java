@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 /**
- * Created by xinyu.jiang on 2015/10/12.
+ * Created by Crytis on 2015/10/12.
  */
 public interface JSONService {
 

@@ -3,8 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>AppleStore存货状态</title>
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </head>
-<body>
+<body onload="getStoreStatus()">
 
+<table class="table">
+
+</table>
+
+<script type="application/javascript">
+    function getStoreStatus() {
+        $.getJSON("storeStatus",function generateTable(data) {
+            $.each(data,function(i,item) {
+                var x=$("<tr><td>"+data[i].userid+"</td><td>"+data[i].name+"</td></tr>");
+                $("table").append(x);
+            })
+        })
+    }
+</script>
 </body>
 </html>

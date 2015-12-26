@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- * Created by xinyu.jiang on 2015/10/12. 处理json数据
+ * Created by Crytis on 2015/10/12. 处理json数据
  */
 @Service
 public class JSONServiceImpl implements JSONService {

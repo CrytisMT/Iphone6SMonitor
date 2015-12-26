@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.cache.LoadingCache;
 
 /**
- * Created by xinyu.jiang on 2015/10/16.
+ * Created by Crytis on 2015/10/16.
  */
 public class HTTPThread implements Runnable {
 

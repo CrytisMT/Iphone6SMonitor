@@ -1,7 +1,7 @@
 package com.maitaidan.IPhoneMonitor.pojo;
 
 /**
- * Created by xinyu.jiang on 2015/10/12.
+ * Created by Crytis on 2015/10/12.
  * hk apple store
  */
 public enum HKStoreEnum implements StoreEnum {

@@ -3,7 +3,7 @@ package com.maitaidan.IPhoneMonitor.pojo;
 import com.maitaidan.IPhoneMonitor.util.OtherUtils;
 
 /**
- * Created by xinyu.jiang on 2015/10/9.
+ * Created by Crytis on 2015/10/9.
  */
 public class onlineTask {
 
